@@ -1,0 +1,103 @@
+NAME
+    RDF::TrineShortcuts - totally unauthorised module for cheats and
+    charlatans
+
+VERSION
+    0.03
+
+SYNOPSIS
+      use RDF::TrineShortcuts;
+  
+      my $model = rdf_parse('http://example.com/data.rdf');
+      my $query = 'ASK WHERE {?person a <http://xmlns.com/foaf/0.1/Person>}';
+      if (rdf_query($query, $model))
+      {
+        print "Document describes a person.\n";
+      }
+      else
+      {
+        print "Document doesn't describe a person.\n";
+        print "What does it describe? Let's see...\n";
+        print rdf_string($model);
+      }
+
+DESCRIPTION
+    This module exports three functions which simplify frequently performed
+    tasks using RDF::Trine and RDF::Query.
+
+    In addition, because it calls "use RDF::Trine", "use RDF::Query", and
+    "use RDF::Query::Client", your code doesn't need to.
+
+    "rdf_parse($data)"
+        $data can be some serialised RDF (in RDF/XML, Turtle, RDF/JSON, or
+        any other format that RDF::Trine::Parser supports); or a URI (string
+        or URI object); or an HTTP::Message object; or a hashref (as per
+        RDF::Trine::Model's add_hashref method); or a file name or an open
+        file handle; or an RDF::Trine::Iterator::Graph. Essentially it could
+        be anything you could reasonably expect to grab RDF from. It can be
+        undef.
+
+        The function returns an RDF::Trine::Model.
+
+        There are additional optional named arguments, of which the two most
+        useful are probably 'base', which sets the base URI for any relative
+        URI references; and 'type', which indicates the media type of the
+        input (though the function can usually guess this quite reliably).
+
+          $model = rdf_parse($input,
+                             'base' => 'http://example.com/',
+                             'type' => 'application/rdf+xml');
+
+        Other named arguments include 'model' to provide an existing
+        RDF::Trine::Model to add statements to; and 'context' for providing
+        a context/graph URI (which may be a string, URI object or
+        RDF::Trine::Node).
+
+    "rdf_string($model, $format)"
+        Serialises an RDF::Trine::Model to a string.
+
+        $model is the model to serialise. If $model is not an
+        RDF::Trine::Model object, then it's automatically passed through
+        rdf_parse first.
+
+        $format is the format to use. One of 'RDFXML' (the default),
+        'RDFJSON', 'Canonical NTriples' or 'NTriples'. If $format is not one
+        of the above, then the function will try to guess what you meant.
+
+    "rdf_query($sparql, $endpoint)"
+        $sparql is a SPARQL query to be run at $endpoint.
+
+        $endpoint may be either an endpoint URI (string or URI object) or a
+        model supported by RDF::Query (e.g. an RDF::Trine::Model.)
+
+        If the SPARQL query returns a boolean (i.e. an ASK query), then this
+        function returns a boolean. If the query returns a graph (i.e.
+        CONSTRUCT or DESCRIBE), then this function returns an
+        RDF::Trine::Model corresponding to the graph. Otherwise (i.e.
+        SELECT) it returns an RDF::Trine::Iterator object.
+
+        For queries which return a graph, an optional $model parameter can
+        be passed containing an existing RDF::Trine::Model to add statements
+        to:
+
+          rdf_parse("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}",
+                    'http://example.com/sparql',
+                    model => $model);
+
+BUGS
+    Please report any bugs to <http://rt.cpan.org/>.
+
+SEE ALSO
+    RDF::Trine, RDF::Query, RDF::Query::Client.
+
+    <http://www.perlrdf.org/>.
+
+AUTHOR
+    Toby Inkster <tobyink@cpan.org>.
+
+COPYRIGHT
+    Copyright 2010 Toby Inkster
+
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
