@@ -3,7 +3,7 @@ NAME
     charlatans
 
 VERSION
-    0.03
+    0.04
 
 SYNOPSIS
       use RDF::TrineShortcuts;
@@ -61,14 +61,25 @@ DESCRIPTION
         rdf_parse first.
 
         $format is the format to use. One of 'RDFXML' (the default),
-        'RDFJSON', 'Canonical NTriples' or 'NTriples'. If $format is not one
-        of the above, then the function will try to guess what you meant.
+        'RDFJSON', 'Turtle', 'Canonical NTriples' or 'NTriples'. If $format
+        is not one of the above, then the function will try to guess what
+        you meant.
 
     "rdf_query($sparql, $endpoint)"
         $sparql is a SPARQL query to be run at $endpoint.
 
         $endpoint may be either an endpoint URI (string or URI object) or a
         model supported by RDF::Query (e.g. an RDF::Trine::Model.)
+
+        Query languages other than SPARQL may be used (see <RDF::Query> for
+        a list of supported languages). e.g.
+
+          rdf_query("SELECT ?s, ?p, ?o WHERE (?s, ?p, ?o)"
+                    $model,
+                    query_lang=>'rdql');
+
+        The query_base option can be used to resolve relative URIs in the
+        query.
 
         If the SPARQL query returns a boolean (i.e. an ASK query), then this
         function returns a boolean. If the query returns a graph (i.e.
@@ -80,7 +91,7 @@ DESCRIPTION
         be passed containing an existing RDF::Trine::Model to add statements
         to:
 
-          rdf_parse("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}",
+          rdf_query("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}",
                     'http://example.com/sparql',
                     model => $model);
 
@@ -91,6 +102,9 @@ SEE ALSO
     RDF::Trine, RDF::Query, RDF::Query::Client.
 
     <http://www.perlrdf.org/>.
+
+    This module is distributed with two command-line RDF tools. trapper is
+    an RDF fetcher/parser/serialiser; toquet is a SPARQL query tool.
 
 AUTHOR
     Toby Inkster <tobyink@cpan.org>.

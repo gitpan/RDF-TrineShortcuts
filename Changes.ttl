@@ -55,6 +55,25 @@ my:v_0_03
 				[ rdfs:label "Module renamed due to popular request. Was 'RDF::Trine::Shortcuts', now 'RDF::TrineShortcuts'."@en ]
 		] .
 
+my:v_0_04
+
+	a               :Version ;
+	dc:issued       "2010-02-04"^^xsd:date ;
+	:revision       "0.04"^^xsd:string ;
+	:file-release   <http://backpan.perl.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.04.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0_03 ;
+			dcs:item
+				[ rdfs:label "The rdf_parse() function will use XML::Atom::OWL and RDF::RDFa::Parser to parse Atom+RDFa if these modules are installed."@en ; a dcs:Addition ] ,
+				[ rdfs:label "When fetching a URI via HTTP(S), rdf_parse() will add data from HTTP Link headers to the resulting model if HTTP::Link::Parser is installed."@en ; a dcs:Addition ] ,
+				[ rdfs:label "rdf_parse() will use XRD::Parser if it's installed."@en ; a dcs:Addition ] ,
+				[ rdfs:label "rdf_query() supports non-SPARQL query languages."@en ; a dcs:Addition ] ,
+				[ rdfs:label "rdf_query() supports relative URIs in queries."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Bundle the 'trapper' command-line tool."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Bundle the 'toquet' command-line tool."@en ; a dcs:Addition ] ,
+				[ rdfs:label "use RDF::Trine 0.116"@en ; a dcs:Update ]
+		] .	
+
 #############################################################
 
 my:project
@@ -74,7 +93,7 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0_03 .
+	:release        my:v_0_03 , my:v_0_04 .
 
 old:project
 	a               :Project ;

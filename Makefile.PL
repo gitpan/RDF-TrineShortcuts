@@ -16,13 +16,19 @@ license             'perl';
 
 test_requires       'Test::More' => '0.61';
 
-requires            'RDF::Trine'         => '0.113';
+requires            'RDF::Trine'         => '0.116';
 requires            'RDF::Query'         => '2.200';
 requires            'RDF::Query::Client' => '0.03';
 requires            'URI'                => '1.30';
 requires            'URI::file'          => 0;
 
-# install_script 'fingerw';
+recommends          'HTTP::Link::Parser' => '0.04';
+recommends          'RDF::RDFa::Parser'  => '0.30';
+recommends          'XML::Atom::OWL'     => '0.02';
+recommends          'XRD::Parser'        => '0.05';
+
+install_script 'toquet';
+install_script 'trapper';
 
 resources(
 	'homepage'   => "http://search.cpan.org/dist/$dist/",

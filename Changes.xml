@@ -62,6 +62,56 @@
     <file-release rdf:resource="http://backpan.perl.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.03.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.03</revision>
   </Version>
+  <Version rdf:about="http://search.cpan.org/dist/RDF-TrineShortcuts/#v_0_04">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">rdf_query() supports non-SPARQL query languages.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">rdf_query() supports relative URIs in queries.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Bundle the 'trapper' command-line tool.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Bundle the 'toquet' command-line tool.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Update>
+            <rdfs:label xml:lang="en">use RDF::Trine 0.116</rdfs:label>
+          </dcs:Update>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">The rdf_parse() function will use XML::Atom::OWL and RDF::RDFa::Parser to parse Atom+RDFa if these modules are installed.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">When fetching a URI via HTTP(S), rdf_parse() will add data from HTTP Link headers to the resulting model if HTTP::Link::Parser is installed.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">rdf_parse() will use XRD::Parser if it's installed.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://search.cpan.org/dist/RDF-TrineShortcuts/#v_0_03"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-04</dc:issued>
+    <file-release rdf:resource="http://backpan.perl.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.04.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.04</revision>
+  </Version>
   <Project rdf:about="http://search.cpan.org/dist/RDF-TrineShortcuts/#project">
     <dc:replaces rdf:resource="http://search.cpan.org/dist/RDF-Trine-Shortcuts/#project"/>
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=RDF-TrineShortcuts"/>
@@ -75,6 +125,7 @@
     <name>RDF-TrineShortcuts</name>
     <programming-language>Perl</programming-language>
     <release rdf:resource="http://search.cpan.org/dist/RDF-TrineShortcuts/#v_0_03"/>
+    <release rdf:resource="http://search.cpan.org/dist/RDF-TrineShortcuts/#v_0_04"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/"/>

@@ -6,7 +6,7 @@ RDF::TrineShortcuts - totally unauthorised module for cheats and charlatans
 
 =head1 VERSION
 
-0.03
+0.04
 
 =head1 SYNOPSIS
 
@@ -31,7 +31,7 @@ use strict;
 use 5.008;
 
 use Exporter;
-use RDF::Trine '0.113';
+use RDF::Trine '0.116';
 use RDF::Trine::Serializer;
 use RDF::Query '2.200';
 use RDF::Query::Client;
@@ -39,7 +39,19 @@ use URI::file;
 
 our @ISA     = qw(Exporter);
 our @EXPORT  = qw(rdf_parse rdf_string rdf_query);
-our $VERSION = '0.03';
+our $VERSION = '0.04';
+my $Has;
+
+BEGIN
+{
+	$Has = {};
+	foreach my $package (qw(XML::Atom::OWL HTTP::Link::Parser XRD::Parser RDF::RDFa::Parser))
+	{
+		$@ = undef;
+		eval "use $package;";
+		$Has->{$package} unless $@;
+	}
+}
 
 =head1 DESCRIPTION
 
@@ -82,7 +94,7 @@ sub rdf_parse
 	my $input = shift;
 	my %args  = @_;
 
-	my $model   = $args{'model'} || RDF::Trine::Model->new(RDF::Trine::Store->temporary_store);
+	my $model   = $args{'model'} || RDF::Trine::Model->temporary_model;
 	my $context = $args{'context'};
 	my $type    = $args{'type'};
 	my $base    = $args{'base'};
@@ -129,9 +141,13 @@ sub rdf_parse
 	if (UNIVERSAL::isa($input, 'URI')
 	or  $input =~ m'^(https?|ftp|file):\S+$')
 	{
+		my $accept = 'application/rdf+xml, text/turtle, application/json;q=0.1, application/xhtml+xml;q=0.1';
+		$accept .= ', application/atom+xml;q=0.2' if $Has->{'XML::Atom::OWL'};
+		$accept .= ', application/xrd+xml;q=0.2'  if $Has->{'XRD::Parser'};
+		
 		my $ua = LWP::UserAgent->new;
 		$ua->agent(sprintf('%s/%s ', __PACKAGE__, $VERSION));
-                $ua->default_header("Accept" => "application/rdf+xml, text/turtle, application/json;q=0.1, application/xhtml+xml;q=0.1");
+		$ua->default_header("Accept" => $accept);
 
 		$input = $ua->get("$input");
 	}
@@ -139,8 +155,13 @@ sub rdf_parse
 	if (UNIVERSAL::isa($input, 'HTTP::Message'))
 	{
 		$type  = $input->content_type unless defined $type;
-		$input = $input->decoded_content;
 		$base  = $input->base;
+		$input = $input->decoded_content;
+		
+		unless ($args{'no_http_links'} || !$Has->{'HTTP::Link::Parser'})
+		{
+			parse_links_into_model($input, $model);
+		}
 	}
 
 	if ($input !~ /[\r\n\t]/ and -e $input)
@@ -159,11 +180,67 @@ sub rdf_parse
 		$input = $_;
 	}
 
+	if ($Has->{'RDF::RDFa::Parser'}
+	and ($type =~ m'atom'i or ((!defined $type) and $input =~ m'http://www.w3.org/2005/Atom')))
+	{
+		my $opts = RDF::RDFa::Parser::OPTS_ATOM();
+		$opts->{'atom_parser'} = 1;
+		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
+		$p->consume;
+		return $model;
+	}
+	elsif ($Has->{'XML::Atom::OWL'}
+	and ($type =~ m'atom'i or ((!defined $type) and $input =~ m'http://www.w3.org/2005/Atom')))
+	{
+		my $p = XML::Atom::OWL->new($input, $base, undef, $model->_store);
+		$p->consume;
+		return $model;
+	}
+	elsif ($Has->{'RDF::RDFa::Parser'}
+	and $type =~ m'svg'i)
+	{
+		my $opts = RDF::RDFa::Parser::OPTS_SVG();
+		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
+		$p->consume;
+		return $model;
+	}
+	elsif ($Has->{'XRD::Parser'}
+	and ($type =~ m'xrd'i or ((!defined $type) and $input =~ m'http://docs.oasis-open.org/ns/xri/xrd-1.0')))
+	{
+		my $p = XRD::Parser->new($input, $base, undef, $model->_store);
+		$p->consume;
+		return $model;
+	}
+
 	my $parser;
 
-	if ($type)
+	if ($type =~ /rdf.?xml/i)
 	{
-		$parser = RDF::Trine::Parser->new($type);
+		$parser = RDF::Trine::Parser->new('RDFXML');
+	}
+	elsif ($type =~ /json/i)
+	{
+		$parser = RDF::Trine::Parser->new('RDFJSON');
+	}
+	elsif ($type =~ /turtle/i)
+	{
+		$parser = RDF::Trine::Parser->new('Turtle');
+	}
+	elsif ($type =~ /ntriples/i)
+	{
+		$parser = RDF::Trine::Parser->new('NTriples');
+	}
+	elsif ($type =~ /nquads/i)
+	{
+		$parser = RDF::Trine::Parser->new('NQuads');
+	}
+	elsif ($type =~ /(xhtml|rdfa)/i)
+	{
+		$parser = RDF::Trine::Parser->new('RDFa');
+	}
+	elsif ($type)
+	{
+		eval { $parser = RDF::Trine::Parser->new($type); }
 	}
 
 	unless ($parser)
@@ -214,7 +291,7 @@ $model is the model to serialise. If $model is not an RDF::Trine::Model
 object, then it's automatically passed through rdf_parse first.
 
 $format is the format to use. One of 'RDFXML' (the default), 'RDFJSON',
-'Canonical NTriples' or 'NTriples'. If $format is not one of the above, 
+'Turtle', 'Canonical NTriples' or 'NTriples'. If $format is not one of the above, 
 then the function will try to guess what you meant.
 
 =cut
@@ -242,7 +319,11 @@ sub rdf_string
 	{
 		$s = RDF::Trine::Serializer::NTriples::Canonical->new;
 	}
-	elsif ($fmt =~ /n\-?t/i || $fmt =~ /turtle/i || $fmt =~ /n(otation)\s*3/i)
+	elsif ($fmt =~ /turtle/i || $fmt =~ /n(otation)\s*3/i)
+	{
+		$s = RDF::Trine::Serializer::Turtle->new;
+	}
+	elsif ($fmt =~ /n\-?t/i)
 	{
 		$s = RDF::Trine::Serializer::NTriples->new;
 	}
@@ -261,6 +342,15 @@ $sparql is a SPARQL query to be run at $endpoint.
 $endpoint may be either an endpoint URI (string or L<URI> object)
 or a model supported by RDF::Query (e.g. an L<RDF::Trine::Model>.)
 
+Query languages other than SPARQL may be used (see <RDF::Query> for
+a list of supported languages). e.g.
+
+  rdf_query("SELECT ?s, ?p, ?o WHERE (?s, ?p, ?o)"
+            $model,
+            query_lang=>'rdql');
+
+The query_base option can be used to resolve relative URIs in the query.
+
 If the SPARQL query returns a boolean (i.e. an ASK query), then
 this function returns a boolean. If the query returns a graph (i.e.
 CONSTRUCT or DESCRIBE), then this function returns an RDF::Trine::Model 
@@ -270,7 +360,7 @@ L<RDF::Trine::Iterator> object.
 For queries which return a graph, an optional $model parameter can be 
 passed containing an existing RDF::Trine::Model to add statements to:
 
-  rdf_parse("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}",
+  rdf_query("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}",
             'http://example.com/sparql',
             model => $model);
 
@@ -285,12 +375,21 @@ sub rdf_query
 	my $r;
 	if (UNIVERSAL::isa($endpoint, 'URI') or !ref $endpoint)
 	{
+		# If $sparql is not usable as-is
+		if (defined $args{'query_base'}
+		or (defined $args{'query_lang'} && $args{'query_lang'} !~ /^sparql$/i))
+		{
+			# Then use RDF::Query to rewrite it.
+			my $q = RDF::Query->new($sparql, $args{'query_base'}, undef, $args{'query_lang'});
+			$sparql = $q->as_sparql;
+		}
+		
 		my $q = RDF::Query::Client->new($sparql);
 		$r = $q->execute("$endpoint");
 	}
 	else
 	{
-		my $q = RDF::Query->new($sparql);
+		my $q = RDF::Query->new($sparql, $args{'query_base'}, undef, $args{'query_lang'});
 		$r = $q->execute($endpoint);
 	}
 
@@ -323,6 +422,9 @@ Please report any bugs to L<http://rt.cpan.org/>.
 L<RDF::Trine>, L<RDF::Query>, L<RDF::Query::Client>.
 
 L<http://www.perlrdf.org/>.
+
+This module is distributed with two command-line RDF tools. L<trapper> is
+an RDF fetcher/parser/serialiser; L<toquet> is a SPARQL query tool.
 
 =head1 AUTHOR
 

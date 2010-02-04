@@ -18,10 +18,15 @@ no_index:
   directory:
     - inc
     - t
+recommends:
+  HTTP::Link::Parser: 0.04
+  RDF::RDFa::Parser: 0.30
+  XML::Atom::OWL: 0.02
+  XRD::Parser: 0.05
 requires:
   RDF::Query: 2.200
   RDF::Query::Client: 0.03
-  RDF::Trine: 0.113
+  RDF::Trine: 0.116
   URI: 1.30
   URI::file: 0
   perl: 5.8.0
@@ -30,4 +35,4 @@ resources:
   homepage: http://search.cpan.org/dist/RDF-TrineShortcuts/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/
-version: 0.03
+version: 0.04

@@ -14,35 +14,36 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 4f809584058eed65aabee17b18f86712e8ce3779 Changes
-SHA1 bd80f647e04464a5f3d1484dcc48494d769b524b Changes.ttl
-SHA1 66694dfb76c425a379d92fe66b480f1691bfaedf Changes.xml
-SHA1 4dc0029fd5a1c7ccf88115c1eae41df1cd5cd594 MANIFEST
+SHA1 af90cae2f1aba685a860884fed8626df30288f55 Changes
+SHA1 bb482aafbb2d32c3d143aaa1b2b92349cbd1f095 Changes.ttl
+SHA1 13baff1c9c04ba22a72059e84e4e3a0f66810db1 Changes.xml
+SHA1 b530dd1ae9ba45a41826c8e0dcc7d20dea4a2356 MANIFEST
 SHA1 28817ddce2c975015b983e0c5bfe5dfb9f44532a MANIFEST.SKIP
-SHA1 f1b5b44cc6c55d259c2a9c3d7c60c2b4a1f48461 META.yml
-SHA1 21d62cc385c2197da86087a612fedd8cdbbd2289 Makefile.PL
-SHA1 877da40fa54db78eede4ba97497586c1c93c7795 README
+SHA1 75c94d069bebe68c9e085fafba30f8d3421b42e0 META.yml
+SHA1 53d282d45d9fa520064effa642c8a3eed2b1a06c Makefile.PL
+SHA1 c5189799ef4c2e59395b2d9601ad11e914931399 README
 SHA1 e5fb92ac217988bfc7a6af739b0459627020a27e inc/Module/AutoInstall.pm
 SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
 SHA1 5c529e96420d964b192f011b121283a4916f7331 inc/Module/Install/AutoInstall.pm
 SHA1 7cd7c349afdf3f012e475507b1017bdfa796bfbd inc/Module/Install/Base.pm
 SHA1 ba186541bbf6439111f01fc70769cf24d22869bf inc/Module/Install/Can.pm
-SHA1 a80bda1e4bcc807c60871bd4e4e0304388fa23db inc/Module/Install/DOAPChangeSets.pm
+SHA1 3369e95c2e5dc40a19931995dffa67929ff4d369 inc/Module/Install/DOAPChangeSets.pm
 SHA1 aaa50eca0d7751db7a4d953fac9bc72c6294e238 inc/Module/Install/Fetch.pm
 SHA1 219da5a95c290312a81477b226f005997d97dcfd inc/Module/Install/Include.pm
 SHA1 3e83972921d54198d1246f7278f08664006cd65d inc/Module/Install/Makefile.pm
 SHA1 12bf1867955480d47d5171a9e9c6a96fabe0b58f inc/Module/Install/Metadata.pm
 SHA1 a615bb050ca0b2d79bfa0224addcb83019a53b09 inc/Module/Install/ReadmeFromPod.pm
+SHA1 3406c9015148c75406903e7382f8182613b5022a inc/Module/Install/Scripts.pm
 SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
 SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
 SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
-SHA1 a699839d4bbdc57cbd104adfb7d484498c864763 lib/RDF/TrineShortcuts.pm
+SHA1 91ca721e85bf4e21eafe9dc5caa3ec0153a09ce3 lib/RDF/TrineShortcuts.pm
 SHA1 bb128dce2db8ad397dbeb957d79d084cc5d2391a t/00sig.t
 SHA1 7d1c85d8978b7138d6964cc84b0f4668fb87ba49 t/01basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkteIG4ACgkQzr+BKGoqfTmcPQCcDO+KW7n15hgrATqDLBAAHlJt
-nxsAoJmWva5dEycLmz2k3ddbb1GN7/0o
-=kDN/
+iEYEARECAAYFAktrHUcACgkQzr+BKGoqfTmqQwCeLvKhHGrYfIa3Q0NS3g/E8ys6
+WOcAniBnrCUGXCo925qxVjv8Dt6DRvem
+=dB+9
 -----END PGP SIGNATURE-----
