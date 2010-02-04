@@ -10,6 +10,9 @@ SIGNATURE
 
 lib/RDF/TrineShortcuts.pm
 
+script/trapper
+script/toquet
+
 t/00sig.t
 t/01basic.t
 

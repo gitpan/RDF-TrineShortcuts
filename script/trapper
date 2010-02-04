@@ -1,0 +1,161 @@
+#!/usr/bin/perl
+
+use Getopt::Long qw(:config no_ignore_case bundling no_getopt_compat permute);
+use LWP::Simple;
+use Pod::Usage;
+use RDF::TrineShortcuts;
+
+my $in_src   = undef;
+my $in_type  = undef;
+my $in_base  = undef;
+my $out_type = 'ntriples';
+my $count    = undef;
+my $quiet    = undef;
+my $help     = undef;
+my $version  = undef;
+
+GetOptions(
+	'input|i=s'      => \$in_type ,
+	'input-uri|I=s'  => \$in_base ,
+	'output|o=s'     => \$out_type ,
+	'count|c'        => \$count ,
+	'quiet|q'        => \$quiet ,
+	'help|h'         => \$help ,
+	'version|v'      => \$version ,
+);
+
+my $in_src  = shift @ARGV || STDIN;
+$in_src     = STDIN if $in_src eq '-';
+$in_base    = shift @ARGV unless defined $in_base;
+
+pod2usage() if $help;
+
+if ($version)
+{
+	foreach my $component (qw(RDF::Trine RDF::TrineShortcuts HTTP::Link::Parser LWP::Simple LWP::UserAgent RDF::RDFa::Parser XML::Atom::OWL XRD::Parser))
+	{
+		my $v = eval "use $component; return \$${component}::VERSION;";
+		printf("%-24s %s\n", $component, $v);
+	}
+	exit;
+}
+
+unless ($quiet)
+{
+	warn sprintf("trapper: Parsing %s %s\n", $in_src, (defined $in_type) ? "as $in_type" : "guessing parser");
+}
+
+my $graph = rdf_parse($in_src, type=>$in_type, base=>$in_base);
+
+if ($count)
+{
+	print $graph->count_statements, "\n";
+}
+else
+{
+	unless ($quiet)
+	{
+		warn sprintf("trapper: Serialising as %s\n", $out_type);
+	}
+
+	print rdf_string($graph, $out_type);
+}
+
+unless ($quiet)
+{
+	warn sprintf("trapper: Parsing returned %d triples\n", $graph->count_statements);
+}
+
+__END__
+
+=head1 NAME
+
+trapper - command-line RDF parsing and serialising tool
+
+=head1 SYNOPSIS
+
+  trapper [options] INPUT-URI [INPUT-BASE-URI]
+
+  Options:
+    --input F, -i F       Set the input format to F
+    --input-uri U, -I U   Alternative to INPUT-BASE-URI
+    --output F, -o F      Set the output format to F
+    --count, -c           Count triples only
+    --quiet, -q           No extra information messages
+    --help, -h            Show this help
+    --version, -v         Show module versions
+  
+  Input formats: rdfxml, turtle, rdfa, rdfjson, atom, xrd.
+  
+  Output formats: rdfxml, turtle, ntriples, rdfjson, canonical.
+
+=head1 OPTIONS
+
+=over
+
+=item B<--input>, B<-i>
+
+Specify the input format. The synopsis of this manual page
+shows a list of input formats. Using media types should work
+too. In summary, it accepts any type that the C<rdf_parse>
+function from L<RDF::TrineShortcuts> accepts.
+
+If an input type is not specified, trapper will try to guess
+the input type (and will almost always get it right).
+
+=item B<--input-uri>, B<-I>, B<INPUT-BASE-URI>
+
+Any of these three methods can be used to specify a base URI
+for the parser to resolve relative URI references.
+
+=item B<--output>, B<-o>
+
+Specifies the output format. The synopsis of this manual page
+shows a list of input formats. Using media types should work
+too. In summary, it accepts any type that the C<rdf_string>
+function from L<RDF::TrineShortcuts> accepts.
+
+If an input type is not specified, 'ntriples' is assumed.
+
+=item B<--count>, B<-c>
+
+Suppresses the output of the data, and just shows a count
+of triples instead.
+
+=item B<--quiet>, B<-q>
+
+Hides useless debugging messages.
+
+=item B<--help>, B<-h>
+
+Shows a short help message.
+
+=item B<--version>, B<-v>
+
+Shows the version of various Perl modules used by trapper. trapper
+itself doesn't have a version number, but is distributed along with
+RDF::TrineShortcuts, so could be considered to have the same version
+number as that.
+
+=back
+
+=head1 NOTE
+
+When possible, trapper attempts to use the same command-line
+options as the 'rapper' tool that is distributed with libraptor.
+However, full compatibility with rapper is not a goal, and is
+certainly not guaranteed.
+
+=head1 AUTHOR
+
+Toby Inkster, E<lt>tobyink@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENCE
+
+Copyright (C) 2010 by Toby Inkster
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut

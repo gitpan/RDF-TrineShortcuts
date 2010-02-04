@@ -1,0 +1,312 @@
+#!/usr/bin/perl
+
+use strict;
+use 5.008;
+
+use File::Slurp;
+use Getopt::Long qw(:config no_ignore_case bundling no_getopt_compat permute);
+use LWP::Simple;
+use Pod::Usage;
+use RDF::TrineShortcuts;
+use YAML qw(Dump);
+
+my ($query_uri, $query_text, $query_lang, $query_base);
+my ($result_format, $count, $dump);
+my (@sources, @graphs, $endpoint);
+my ($help, $version, $quiet);
+
+GetOptions(
+  'exec|e=s'      => \$query_text ,
+  'input|i=s'     => \$query_lang ,
+  'results|output|r|o=s' => \$result_format ,
+  'count|c'       => \$count ,
+  'quiet|q'       => \$quiet ,
+  'data|D=s@'     => \@sources ,
+  'source|named|G|s=s@' => \@graphs ,
+  'dump-query|d=s' => \$dump ,
+  'endpoint|E=s'  => \$endpoint ,
+  'help|h'        => \$help ,
+  'version|v'     => \$version ,
+);
+
+pod2usage() if $help;
+
+if ($version)
+{
+	foreach my $component (qw(RDF::Query RDF::Query::Client RDF::Trine RDF::TrineShortcuts LWP::Simple LWP::UserAgent))
+	{
+		my $v = eval "use $component; return \$${component}::VERSION;";
+		printf("%-24s %s\n", $component, $v);
+	}
+	exit;
+}
+
+unless ($query_text)
+{
+	$query_uri    = shift @ARGV || '-';
+	
+	if ($query_uri eq '-')
+	{
+		warn "toquet: reading query from STDIN\n"
+			unless $quiet;
+		local $/;
+		$query_text = <>;
+	}
+	elsif (-e $query_uri)
+	{
+		warn "toquet: reading query from file $query_uri\n"
+			unless $quiet;
+		$query_text = read_file($query_uri);
+	}
+	elsif ($query_uri =~ /:/)
+	{
+		warn "toquet: fetching query from URI $query_uri\n"
+			unless $quiet;
+		$query_text = get($query_uri);
+	}
+	else
+	{
+		die "toquet: could not retrieve query from '$query_uri' (file doesn't exist?)\n";
+	}
+}
+
+$query_base = shift @ARGV;
+
+pod2usage("At least one of --data, --named, --endpoint or --dump-query must be provided.")
+	unless @sources || @graphs || $endpoint || $dump;
+
+if ($dump)
+{
+	my $q = RDF::Query->new($query_text, $query_base, undef, $query_lang);
+	
+	if (!$q)
+	{
+		warn "toquet: Could not parse the query.\n";
+	}
+	if ($dump =~ /sparql/)
+	{
+		print $q->as_sparql;
+	}
+	elsif ($dump =~ /pattern/)
+	{
+		print Dump($q->pattern);
+	}
+	elsif ($dump =~ /parsed/)
+	{
+		print Dump($q->parsed);
+	}
+	else
+	{
+		print $q->sse;
+	}
+	
+	exit;
+}
+
+if ($endpoint)
+{
+	die "toquet: cannot specify --data or --named if --endpoint is given\n"
+		if @sources or @graphs;
+}
+else
+{
+	$endpoint = rdf_parse;
+	foreach my $uri (@sources)
+	{
+		warn "toquet: adding data from $uri to default graph\n"
+			unless $quiet;
+		rdf_parse($uri, model=>$endpoint);
+	}
+	foreach my $uri (@graphs)
+	{
+		warn "toquet: adding data from $uri to named graph\n"
+			unless $quiet;
+		rdf_parse($uri, model=>$endpoint, context=>$uri);
+	}
+}
+
+my $result = rdf_query($query_text, $endpoint,
+	query_base=>$query_base, query_lang=>$query_lang);
+
+if (UNIVERSAL::isa($result, 'RDF::Trine::Iterator')
+and $result->is_bindings)
+{
+	if ($count)
+	{
+		my $m = $result->materialize;
+		print $m->length . "\n";
+	}
+	elsif ($result_format =~ /json/)
+	{
+		print $result->as_json . "\n";
+	}
+	elsif ($result_format =~ /xml/)
+	{
+		print $result->as_xml . "\n";
+	}
+	else
+	{
+		print $result->as_string . "\n";
+	}
+}
+elsif (UNIVERSAL::isa($result, 'RDF::Trine::Model'))
+{
+	if ($count)
+	{
+		print $result->count_statements . "\n";
+	}
+	else
+	{
+		print rdf_string($result, $result_format||'ntriples');
+	}
+}
+elsif (!ref $result)
+{
+	my $iterator = RDF::Trine::Iterator::Boolean->new( [$result] );
+	
+	if ($count)
+	{
+		print "1\n";
+	}
+	elsif ($result_format =~ /json/)
+	{
+		print $iterator->as_json . "\n";
+	}
+	elsif ($result_format =~ /xml/)
+	{
+		print $iterator->as_xml . "\n";
+	}
+	else
+	{
+		print $result ? "Yes\n" : "No\n";
+	}
+}
+
+__END__
+
+=head1 NAME
+
+toquet - command-line RDF query tool
+
+=head1 SYNOPSIS
+
+  trapper [options] QUERY-URI [QUERY-BASE-URI]
+  trapper [options] -e QUERY-STRING [QUERY-BASE-URI]
+  
+  Options:
+    --exec Q, -e Q        Provide query as a string
+    --input L, -i L       Set query language to L
+    --results F, -O F     Set result format to F
+    --endpoint U, -E U    SPARQL Protocol endpoint
+    --data U, -D U        Data to query
+    --named U, -G U       Named graph to query
+    --dump-query F, -d F  Dump query in format F
+    --count, -c           Count results only
+    --quiet, -q           No extra information messages
+    --help, -h            Show this help
+    --version, -v         Show module versions
+  
+  Query languages: sparql, rdql.
+  
+  Graph output formats: rdfxml, turtle, ntriples,
+                        rdfjson, canonical.
+  Binding output formats: xml, json, text.
+  Boolean output formats: xml, json, text.
+  
+  Dump formats: sparql, sse, parsed, pattern.
+
+=head1 OPTIONS
+
+=over
+
+=item B<--exec>, B<-e>
+
+Provides the string to use as a query. May be in SPARQL or
+RDQL. (RDQL is even supported on remote endpoints which only
+speak SPARQL!)
+
+If omitted, a query URI must be provided instead. This URI
+will be dereferenced (fetched) and a query is expected to be
+found inside (the HTTP Content-Type header is ignored).
+
+The query base URI may be provided to allow the resolution
+of any relative URI references in the query.
+
+=item B<--results>, B<-r>, B<--output>, B<-o>
+
+Specifies the output format. The synopsis of this manual page
+shows a list of input formats.
+
+Defaults are 'ntriples' (for graphs) and 'text' (for bindings
+and booleans).
+
+=item B<--endpoint>, B<-E>
+
+A SPARQL Protocol 1.0 endpoint to query.
+
+=item B<--data>, B<-D>
+
+Adds data from a URL to the default (unnamed) graph to be queried.
+
+This option can be used multiple times, but cannot be used in
+conjunction with --endpoint.
+
+=item B<--named>, B<-G>, B<--source>, B<-s>
+
+Adds data from a URL to a named graph to be queried.
+
+This option can be used multiple times, but cannot be used in
+conjunction with --endpoint.
+
+=item B<--dump-query>, B<-d>
+
+Dump the query itself (not the results).
+
+Queries can be dumped as a SPARQL string (useful for interpolating
+relative URIs, or converting from RDQL), or as SSE. The parsed query
+(or just the graph pattern within it) can be dumped in YAML.
+
+=item B<--count>, B<-c>
+
+Suppresses the output of the data, and just shows a count
+of triples/bindings instead.
+
+Boolean results (i.e. ASK queries) always return a count of 1.
+
+=item B<--quiet>, B<-q>
+
+Hides useless debugging messages.
+
+=item B<--help>, B<-h>
+
+Shows a short help message.
+
+=item B<--version>, B<-v>
+
+Shows the version of various Perl modules used by toquet. toquet
+itself doesn't have a version number, but is distributed along with
+RDF::TrineShortcuts, so could be considered to have the same version
+number as that.
+
+=back
+
+=head1 NOTE
+
+When possible, toquet attempts to use the same command-line
+options as the 'roqet' tool that is distributed with librasqal.
+However, full compatibility with roqet is not a goal, and is
+certainly not guaranteed.
+
+=head1 AUTHOR
+
+Toby Inkster, E<lt>tobyink@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENCE
+
+Copyright (C) 2010 by Toby Inkster
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut

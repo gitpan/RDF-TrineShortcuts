@@ -35,4 +35,4 @@ resources:
   homepage: http://search.cpan.org/dist/RDF-TrineShortcuts/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/
-version: 0.04
+version: 0.05

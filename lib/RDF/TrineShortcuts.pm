@@ -6,7 +6,7 @@ RDF::TrineShortcuts - totally unauthorised module for cheats and charlatans
 
 =head1 VERSION
 
-0.04
+0.05
 
 =head1 SYNOPSIS
 
@@ -39,7 +39,7 @@ use URI::file;
 
 our @ISA     = qw(Exporter);
 our @EXPORT  = qw(rdf_parse rdf_string rdf_query);
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 my $Has;
 
 BEGIN
