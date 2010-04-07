@@ -14,20 +14,20 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 dd81740421302493852c12a7a56297209eb0884f Changes
-SHA1 bb482aafbb2d32c3d143aaa1b2b92349cbd1f095 Changes.ttl
-SHA1 13baff1c9c04ba22a72059e84e4e3a0f66810db1 Changes.xml
-SHA1 c1519ab316c9924f99a5cd958cd4d1099bf1137b MANIFEST
-SHA1 28817ddce2c975015b983e0c5bfe5dfb9f44532a MANIFEST.SKIP
-SHA1 b36c39af1c3b321e81c05fbe744797dfad3e8f88 META.yml
-SHA1 53d282d45d9fa520064effa642c8a3eed2b1a06c Makefile.PL
-SHA1 33a677a629f2d956e666ab883c4d88c05d942f51 README
+SHA1 ba44e5ff76f814da1ca2a16679d05c9686323d68 Changes
+SHA1 d5f897b0cdace18fe164e497c18588f2e53c0b84 Changes.ttl
+SHA1 0263948491328cbee4abab7048617e1dca8f47ee Changes.xml
+SHA1 0c9293f0672e4b96e576aeadc25bf3b77e29c467 MANIFEST
+SHA1 f5e0e1a1bb5bd5e30043a2123bf757fa648bedf8 MANIFEST.SKIP
+SHA1 0af125be43892327c0497110e903ff3c9fb04860 META.yml
+SHA1 bd47c5993a8ba626b909871125905bb9cb831020 Makefile.PL
+SHA1 bfc947172cf7e4c29a6f458228852252ac38ff27 README
 SHA1 e5fb92ac217988bfc7a6af739b0459627020a27e inc/Module/AutoInstall.pm
 SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
 SHA1 5c529e96420d964b192f011b121283a4916f7331 inc/Module/Install/AutoInstall.pm
 SHA1 7cd7c349afdf3f012e475507b1017bdfa796bfbd inc/Module/Install/Base.pm
 SHA1 ba186541bbf6439111f01fc70769cf24d22869bf inc/Module/Install/Can.pm
-SHA1 3369e95c2e5dc40a19931995dffa67929ff4d369 inc/Module/Install/DOAPChangeSets.pm
+SHA1 b19da2715a136aba51510f687a7b4e431e0a4bec inc/Module/Install/DOAPChangeSets.pm
 SHA1 aaa50eca0d7751db7a4d953fac9bc72c6294e238 inc/Module/Install/Fetch.pm
 SHA1 219da5a95c290312a81477b226f005997d97dcfd inc/Module/Install/Include.pm
 SHA1 3e83972921d54198d1246f7278f08664006cd65d inc/Module/Install/Makefile.pm
@@ -37,15 +37,16 @@ SHA1 3406c9015148c75406903e7382f8182613b5022a inc/Module/Install/Scripts.pm
 SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
 SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
 SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
-SHA1 093025ff9dd239d1c0f8f0dfbf823dbcdddd2a98 lib/RDF/TrineShortcuts.pm
-SHA1 d6d9125b06cb17f3edc204038350621f690701e2 script/toquet
-SHA1 eae6d74e6e2923717f0bac293b0a9b8680abab8c script/trapper
+SHA1 37d78f2bcb411ed0b9ba61a05041861ebfcfd26a lib/RDF/TrineShortcuts.pm
+SHA1 e41ab2a4fa0a4b9a6e339b872ed6ef2dc97c6880 script/toquet
+SHA1 b15c2899c3e0924bf491c6e868dc3063382be801 script/trapper
+SHA1 fdc72f7492c7fabe77197bf8f0a485e702f8637f script/trist
 SHA1 bb128dce2db8ad397dbeb957d79d084cc5d2391a t/00sig.t
 SHA1 7d1c85d8978b7138d6964cc84b0f4668fb87ba49 t/01basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAktrW0wACgkQzr+BKGoqfTmjigCdGW+lLDwhSxYlBZ9K0huYhaOj
-YjcAoK/UYIi/qGrdkB0xeBbz7HwL/pq+
-=2D0d
+iEYEARECAAYFAku8fdYACgkQzr+BKGoqfTmzBwCginxe4wV7mEUn7CN/2Dh0doVn
+C3AAn2EJdcUmOyk973REr2rDj7d+p5FJ
+=YsM/
 -----END PGP SIGNATURE-----

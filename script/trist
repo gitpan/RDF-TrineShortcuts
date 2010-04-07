@@ -1,0 +1,286 @@
+#!/usr/bin/perl
+
+use Getopt::Long qw(:config no_ignore_case bundling no_getopt_compat permute);
+use LWP::Simple;
+use Pod::Usage;
+use RDF::TrineShortcuts;
+
+my $in_src   = undef;
+my $in_type  = undef;
+my $in_base  = undef;
+my $summary  = 1;
+my $vocabs   = 0;
+my $nodes    = 0;
+my $quiet    = undef;
+my $help     = undef;
+my $version  = undef;
+
+GetOptions(
+	'input|i=s'      => \$in_type ,
+	'input-uri|I=s'  => \$in_base ,
+	'quiet|q'        => \$quiet ,
+	'help|h'         => \$help ,
+	'version|v'      => \$version ,
+	'summary!'       => \$summary ,
+	'vocabs!'        => \$vocabs ,
+	'nodes=i'        => \$nodes ,
+);
+
+my $in_src  = shift @ARGV || '<STDIN>';
+$in_src     = '<STDIN>' if $in_src eq '-';
+$in_base    = shift @ARGV unless defined $in_base;
+
+pod2usage() if $help;
+
+if ($version)
+{
+	foreach my $component (qw(RDF::Trine RDF::TrineShortcuts HTTP::Link::Parser LWP::Simple LWP::UserAgent RDF::RDFa::Parser XML::Atom::OWL XRD::Parser))
+	{
+		my $v = eval "use $component; return \$${component}::VERSION;";
+		printf("%-24s %s\n", $component, $v);
+	}
+	exit;
+}
+
+unless ($quiet)
+{
+	warn sprintf("trist: Parsing %s %s\n", $in_src, (defined $in_type) ? "as $in_type" : "guessing parser");
+}
+
+if ($in_src eq '<STDIN>')
+{
+	$in_src = '';
+	$in_src .= $_ while <>;
+}
+
+my $graph = rdf_parse($in_src, type=>$in_type, base=>$in_base);
+my $iter  = $graph->as_stream;
+
+my $counts = {};
+while (my $st = $iter->next)
+{
+	$counts->{'Subject'}->{ $st->subject->as_ntriples }++;
+	$counts->{'Predicate'}->{ $st->predicate->as_ntriples }++;
+	$counts->{'Object'}->{ $st->object->as_ntriples }++;
+
+	$counts->{'Node'}->{ $st->subject->as_ntriples }++;
+	$counts->{'Node'}->{ $st->predicate->as_ntriples }++;
+	$counts->{'Node'}->{ $st->object->as_ntriples }++;
+	
+	$counts->{'ABox'}->{ $st->subject->as_ntriples }++;
+
+	if ($st->predicate->uri eq 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+	{
+		$counts->{'Type'}->{ $st->object->as_ntriples }++;
+		
+		if ($st->object->is_resource)
+		{
+			eval
+			{
+				my ($vocab, $term) = $st->predicate->qname;
+				$counts->{'Vocabulary'}->{"<${vocab}>"}++;
+			};
+		}
+	}
+	else
+	{
+		$counts->{'ABox'}->{ $st->object->as_ntriples }++;
+	}
+	
+	eval
+	{
+		my ($vocab, $term) = $st->predicate->qname;
+		$counts->{'Vocabulary'}->{"<${vocab}>"}++;
+	};
+	
+	if ($st->object->is_literal)
+	{
+		my $dt = $st->object->literal_datatype;
+		if ($dt)
+		{
+			$counts->{'Datatype'}->{"<${dt}>"}++;
+		}
+	}
+
+	if ($st->object->is_literal)
+	{
+		my $l = $st->object->literal_value_language;
+		if ($l)
+		{
+			$counts->{'Language'}->{"\"${l}\"^^<http://www.w3.org/2001/XMLSchema#language>"}++;
+		}
+	}
+	
+	$counts->{'Statement'}++;
+}
+
+if ($summary || $vocabs || $nodes)
+{
+	print "\@prefix :           <http://ontologie.es/trist#> .\n";
+	print "\@prefix stats:      <http://ontologie.es/trist#statistics/> .\n"
+		if $summary;
+	print "\n_:dataset\n\n";
+}
+
+if ($summary)
+{
+	print "# SUMMARY\n";
+	
+	printf("  :statement-count %s ;\n", $counts->{'Statement'});
+	
+	foreach my $key (qw(Node Subject Predicate Object Type Language Datatype Vocabulary))
+	{
+		my @all = keys %{$counts->{$key}};
+		@all = reverse sort { $counts->{$key}->{$a} <=> $counts->{$key}->{$b} } @all;
+		printf("  stats:%s [\n", lc $key);
+		printf("    :unique-values %d ; \n", scalar keys %{$counts->{$key}});
+		printf("    :top-value     [ :value %s; :count %d ] \n", $all[0], $counts->{$key}->{$all[0]})
+			if $counts->{$key}->{$all[0]};
+		print "  ] ; \n";
+	}
+	print "\n";
+}
+
+if ($vocabs)
+{
+	print "# VOCABULARIES\n";
+	
+	my $key = 'Vocabulary';
+	my @all = keys %{$counts->{$key}};
+	@all = reverse sort { $counts->{$key}->{$a} <=> $counts->{$key}->{$b} } @all;
+	
+	foreach my $vocab (@all)
+	{
+		printf("  :uses-vocab [ :value %s ; :count %d ] ;\n", $vocab, $counts->{$key}->{$vocab});
+	}
+	print "\n";
+}
+
+if ($nodes)
+{
+	print "# ABOX NODES\n";
+	my $key = 'ABox';
+	my @all = keys %{$counts->{$key}};
+	@all = reverse sort { $counts->{$key}->{$a} <=> $counts->{$key}->{$b} } @all;
+	
+	my $count = 0;
+	ONE: foreach my $n (@all)
+	{
+		$count++;
+		printf("  :describes [ :value %s ; :count %d ] ;\n", $n, $counts->{$key}->{$n})
+			if $counts->{$key}->{$n} > 1
+			|| $n !~ /^\"/;
+		last ONE if $count >= $nodes;
+	}
+	
+	print "\n";
+}
+
+print ".\n" if ($summary || $vocabs || $nodes);
+
+__END__
+
+=head1 NAME
+
+trist - command-line RDF statistics
+
+=head1 SYNOPSIS
+
+  trist [options] INPUT-URI [INPUT-BASE-URI]
+
+  Options:
+    --input F, -i F        Set the input format to F
+    --input-uri U, -I U    Alternative to INPUT-BASE-URI
+    --summary, --nosummary Show/hide summary info
+    --vocabs, --novocabs   Show/hide vocabulary info
+    --nodes=X              Show ABox node info
+    --quiet, -q            No extra information messages
+    --help, -h             Show this help
+    --version, -v          Show module versions
+  
+  Input formats: rdfxml, turtle, rdfa, rdfjson, atom, xrd.
+  
+=head1 OPTIONS
+
+=over
+
+=item B<--input>, B<-i>
+
+Specify the input format. The synopsis of this manual page
+shows a list of input formats. Using media types should work
+too. In summary, it accepts any type that the C<rdf_parse>
+function from L<RDF::TrineShortcuts> accepts.
+
+If an input type is not specified, trist will try to guess
+the input type (and will almost always get it right).
+
+=item B<--input-uri>, B<-I>, B<INPUT-BASE-URI>
+
+Any of these three methods can be used to specify a base URI
+for the parser to resolve relative URI references.
+
+=item B<--summary>, B<--nosummary>
+
+Show (or not) a summary of the RDF data. Shown by default.
+Includes counts of the number of unique values in subject,
+predicate and object positions, along with the most popular
+subject, predicate and object; etc.
+
+In this summary, "Type" is defined as any node that is the
+object of a triple where the predicate is rdf:type; "Vocabulary"
+is calculated from splitting predicate URIs and type URIs into
+vocabulary and term using QName rules.
+
+=item B<--vocabs>, B<--novocabs>
+
+Vocabularies calculated as above. This shows all vocabularies
+used in the source RDF data; not just the single most popular
+one.
+
+=item B<--nodes>=X
+
+Show the X most popular "ABox" nodes. RDF doesn't actually
+distinguish between so called TBox and ABox terms, but this
+tool treats any predicates or rdf:type objects as TBox,
+everything else as ABox.
+
+One-off literals are ignored.
+
+=item B<--quiet>, B<-q>
+
+Hides useless debugging messages.
+
+=item B<--help>, B<-h>
+
+Shows a short help message.
+
+=item B<--version>, B<-v>
+
+Shows the version of various Perl modules used by trist. trist
+itself doesn't have a version number, but is distributed along with
+RDF::TrineShortcuts, so could be considered to have the same version
+number as that.
+
+=back
+
+=head1 NOTE
+
+Trist is a tool that generates a set of statistics about some input
+RDF data. Its output is in Turtle, designed to be as human-readable
+as possible.
+
+Trist is an archaic spelling of 'tryst' which is a secret meeting.
+
+=head1 AUTHOR
+
+Toby Inkster, E<lt>tobyink@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENCE
+
+Copyright (C) 2010 by Toby Inkster
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut

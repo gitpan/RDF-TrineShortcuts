@@ -6,7 +6,7 @@ RDF::TrineShortcuts - totally unauthorised module for cheats and charlatans
 
 =head1 VERSION
 
-0.05
+0.06
 
 =head1 SYNOPSIS
 
@@ -39,7 +39,7 @@ use URI::file;
 
 our @ISA     = qw(Exporter);
 our @EXPORT  = qw(rdf_parse rdf_string rdf_query);
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 my $Has;
 
 BEGIN
@@ -226,11 +226,11 @@ sub rdf_parse
 	{
 		$parser = RDF::Trine::Parser->new('Turtle');
 	}
-	elsif ($type =~ /ntriples/i)
+	elsif ($type =~ /ntriple/i)
 	{
 		$parser = RDF::Trine::Parser->new('NTriples');
 	}
-	elsif ($type =~ /nquads/i)
+	elsif ($type =~ /nquad/i)
 	{
 		$parser = RDF::Trine::Parser->new('NQuads');
 	}

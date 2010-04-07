@@ -4,8 +4,8 @@
 @prefix dcs:     <http://ontologi.es/doap-changeset#> .
 @prefix dc:      <http://purl.org/dc/terms/> .
 @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
-@prefix my:      <http://search.cpan.org/dist/RDF-TrineShortcuts/#> .
-@prefix old:     <http://search.cpan.org/dist/RDF-Trine-Shortcuts/#> .
+@prefix my:      <http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/> .
+@prefix old:     <http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix toby:    <http://tobyinkster.co.uk/#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
@@ -21,48 +21,48 @@
 
 #############################################################
 
-old:v_0_01
+old:v_0-01
 
 	a               :Version ;
 	dc:issued       "2010-01-20"^^xsd:date ;
 	:revision       "0.01"^^xsd:string ;
-	:file-release   <http://backpan.perl.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.01.tar.gz> ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.01.tar.gz> ;
 	rdfs:label      "first release"@en .
 
-old:v_0_02
+old:v_0-02
 
 	a               :Version ;
 	dc:issued       "2010-01-22"^^xsd:date ;
 	:revision       "0.02"^^xsd:string ;
-	:file-release   <http://backpan.perl.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.02.tar.gz> ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.02.tar.gz> ;
 	dcs:changeset [
-			dcs:versus old:v_0_01 ;
+			dcs:versus old:v_0-01 ;
 			dcs:item
 				[ rdfs:label "Don't break contexts in rdf_parse."@en ; a dcs:Bugfix ] ,
 				[ rdfs:label "rdf_parse should take more than just the first statement from a stream."@en ; a dcs:Bugfix ] ,
 				[ rdfs:label "Allow rdf_parse to take an RDF::Trine::Model as input."@en ; a dcs:Addition ]
 		] .
 
-my:v_0_03
+my:v_0-03
 
 	a               :Version ;
 	dc:issued       "2010-01-25"^^xsd:date ;
 	:revision       "0.03"^^xsd:string ;
-	:file-release   <http://backpan.perl.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.03.tar.gz> ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.03.tar.gz> ;
 	dcs:changeset [
-			dcs:versus old:v_0_02 ;
+			dcs:versus old:v_0-02 ;
 			dcs:item
 				[ rdfs:label "Module renamed due to popular request. Was 'RDF::Trine::Shortcuts', now 'RDF::TrineShortcuts'."@en ]
 		] .
 
-my:v_0_04
+my:v_0-04
 
 	a               :Version ;
 	dc:issued       "2010-02-04"^^xsd:date ;
 	:revision       "0.04"^^xsd:string ;
-	:file-release   <http://backpan.perl.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.04.tar.gz> ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.04.tar.gz> ;
 	dcs:changeset [
-			dcs:versus my:v_0_03 ;
+			dcs:versus my:v_0-03 ;
 			dcs:item
 				[ rdfs:label "The rdf_parse() function will use XML::Atom::OWL and RDF::RDFa::Parser to parse Atom+RDFa if these modules are installed."@en ; a dcs:Addition ] ,
 				[ rdfs:label "When fetching a URI via HTTP(S), rdf_parse() will add data from HTTP Link headers to the resulting model if HTTP::Link::Parser is installed."@en ; a dcs:Addition ] ,
@@ -72,7 +72,35 @@ my:v_0_04
 				[ rdfs:label "Bundle the 'trapper' command-line tool."@en ; a dcs:Addition ] ,
 				[ rdfs:label "Bundle the 'toquet' command-line tool."@en ; a dcs:Addition ] ,
 				[ rdfs:label "use RDF::Trine 0.116"@en ; a dcs:Update ]
-		] .	
+		] .
+
+my:v_0-05
+
+	a               :Version ;
+	dc:issued	"2010-02-04"^^xsd:date ;
+	:revision	"0.05"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.05.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-04 ;
+			dcs:item [ rdfs:label "Fix a packaging error."@en ]
+		] .
+
+my:v_0-06
+
+	a               :Version ;
+	dc:issued	"2010-04-07"^^xsd:date ;
+	:revision	"0.06"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.06.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-05 ;
+			dcs:item
+				[ rdfs:label "Fix toquet documentation synopsis."@en ] ,
+				[ rdfs:label "Bundle the 'trist' command-line RDF stats tool."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Deal with STDIN correctly in trapper."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "toquet --describe shortcut."@en ; a dcs:Addition ]
+		] .
+
+
 
 #############################################################
 
@@ -93,7 +121,7 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0_03 , my:v_0_04 .
+	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 .
 
 old:project
 	a               :Project ;
@@ -105,7 +133,7 @@ old:project
 	:tester         toby:i ;
 	:created        "2010-01-20"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        old:v_0_01 , old:v_0_02 .
+	:release        old:v_0-01 , old:v_0-02 .
 
 #############################################################
 
@@ -114,6 +142,7 @@ toby:i
 	a               foaf:Person ;
 	foaf:name       "Toby Inkster" ;
 	foaf:homepage   <http://tobyinkster.co.uk/> ;
-	foaf:page       <http://search.cpan.org/~tobyink/> .
+	foaf:page       <http://search.cpan.org/~tobyink/> ;
+	<http://www.w3.org/2002/07/owl#sameAs> <http://purl.org/NET/cpan-uri/person/tobyink> .
 
 #############################################################

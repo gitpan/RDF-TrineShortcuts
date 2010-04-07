@@ -10,7 +10,7 @@ use Pod::Usage;
 use RDF::TrineShortcuts;
 use YAML qw(Dump);
 
-my ($query_uri, $query_text, $query_lang, $query_base);
+my ($query_uri, $query_text, $query_lang, $query_base, @describe);
 my ($result_format, $count, $dump);
 my (@sources, @graphs, $endpoint);
 my ($help, $version, $quiet);
@@ -22,6 +22,7 @@ GetOptions(
   'count|c'       => \$count ,
   'quiet|q'       => \$quiet ,
   'data|D=s@'     => \@sources ,
+  'describe=s@'   => \@describe ,
   'source|named|G|s=s@' => \@graphs ,
   'dump-query|d=s' => \$dump ,
   'endpoint|E=s'  => \$endpoint ,
@@ -39,6 +40,15 @@ if ($version)
 		printf("%-24s %s\n", $component, $v);
 	}
 	exit;
+}
+
+if (@describe)
+{
+	$query_text = 'DESCRIBE ';
+	foreach my $uri (@describe)
+	{
+		$query_text .= sprintf("<${uri}> ");
+	}
 }
 
 unless ($query_text)
@@ -190,11 +200,13 @@ toquet - command-line RDF query tool
 
 =head1 SYNOPSIS
 
-  trapper [options] QUERY-URI [QUERY-BASE-URI]
-  trapper [options] -e QUERY-STRING [QUERY-BASE-URI]
+  toquet [options] QUERY-URI [QUERY-BASE-URI]
+  toquet [options] -e QUERY-STRING [QUERY-BASE-URI]
+  toquet [options] --describe URI
   
   Options:
     --exec Q, -e Q        Provide query as a string
+    --describe U          Describe URI <U>
     --input L, -i L       Set query language to L
     --results F, -O F     Set result format to F
     --endpoint U, -E U    SPARQL Protocol endpoint
@@ -231,6 +243,11 @@ found inside (the HTTP Content-Type header is ignored).
 
 The query base URI may be provided to allow the resolution
 of any relative URI references in the query.
+
+=item B<--describe>
+
+Request a description of a particular URI. This overrides
+B<--exec>. Multiple URIs can be provided.
 
 =item B<--results>, B<-r>, B<--output>, B<-o>
 
@@ -296,6 +313,8 @@ When possible, toquet attempts to use the same command-line
 options as the 'roqet' tool that is distributed with librasqal.
 However, full compatibility with roqet is not a goal, and is
 certainly not guaranteed.
+
+A toquet is a small bonnet-like hat.
 
 =head1 AUTHOR
 

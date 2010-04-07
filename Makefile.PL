@@ -29,6 +29,7 @@ recommends          'XRD::Parser'        => '0.05';
 
 install_script 'toquet';
 install_script 'trapper';
+install_script 'trist';
 
 resources(
 	'homepage'   => "http://search.cpan.org/dist/$dist/",

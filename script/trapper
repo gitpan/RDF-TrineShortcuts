@@ -24,8 +24,8 @@ GetOptions(
 	'version|v'      => \$version ,
 );
 
-my $in_src  = shift @ARGV || STDIN;
-$in_src     = STDIN if $in_src eq '-';
+my $in_src  = shift @ARGV || '<STDIN>';
+$in_src     = '<STDIN>' if $in_src eq '-';
 $in_base    = shift @ARGV unless defined $in_base;
 
 pod2usage() if $help;
@@ -43,6 +43,12 @@ if ($version)
 unless ($quiet)
 {
 	warn sprintf("trapper: Parsing %s %s\n", $in_src, (defined $in_type) ? "as $in_type" : "guessing parser");
+}
+
+if ($in_src eq '<STDIN>')
+{
+	$in_src = '';
+	$in_src .= $_ while <>;
 }
 
 my $graph = rdf_parse($in_src, type=>$in_type, base=>$in_base);
@@ -145,6 +151,8 @@ When possible, trapper attempts to use the same command-line
 options as the 'rapper' tool that is distributed with libraptor.
 However, full compatibility with rapper is not a goal, and is
 certainly not guaranteed.
+
+A trapper is a person who catches animals, usually for fur.
 
 =head1 AUTHOR
 
