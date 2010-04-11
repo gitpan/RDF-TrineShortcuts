@@ -116,8 +116,8 @@ while (my $st = $iter->next)
 
 if ($summary || $vocabs || $nodes)
 {
-	print "\@prefix :           <http://ontologie.es/trist#> .\n";
-	print "\@prefix stats:      <http://ontologie.es/trist#statistics/> .\n"
+	print "\@prefix :           <http://ontologi.es/trist#> .\n";
+	print "\@prefix stats:      <http://ontologi.es/trist#statistics/> .\n"
 		if $summary;
 	print "\n_:dataset\n\n";
 }

@@ -100,6 +100,20 @@ my:v_0-06
 				[ rdfs:label "toquet --describe shortcut."@en ; a dcs:Addition ]
 		] .
 
+my:v_0-07
+
+	a               :Version ;
+	dc:issued	"2010-04-11"^^xsd:date ;
+	:revision	"0.07"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.07.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-06 ;
+			dcs:item
+				[ rdfs:label "Allow rdf_parse (and thus command-line tools) to accept RDF::Trine::Store constructor strings, or RDF::Trine::Store objects."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Fix namespaces in trist output."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "Allow rdf_string to take a 'namespaces' argument, and provide a default value."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Provide shortcuts for creating RDF::Trine::Statement and RDF::Trine::Node objects, not exported by default."@en ; a dcs:Addition ]
+		] .
 
 
 #############################################################
@@ -121,7 +135,8 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 .
+	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 ,
+	                my:v_0-07 .
 
 old:project
 	a               :Project ;

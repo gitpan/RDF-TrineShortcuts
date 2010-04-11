@@ -15,7 +15,9 @@ script/toquet
 script/trist
 
 t/00sig.t
-t/01basic.t
+t/01parse_and_serialise.t
+t/02query.t
+t/03nodes.t
 
 inc/Module/AutoInstall.pm
 inc/Module/Install/AutoInstall.pm

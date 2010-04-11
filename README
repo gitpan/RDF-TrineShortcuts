@@ -3,7 +3,7 @@ NAME
     charlatans
 
 VERSION
-    0.06
+    0.07
 
 SYNOPSIS
       use RDF::TrineShortcuts;
@@ -22,7 +22,7 @@ SYNOPSIS
       }
 
 DESCRIPTION
-    This module exports three functions which simplify frequently performed
+    This module exports four functions which simplify frequently performed
     tasks using RDF::Trine and RDF::Query.
 
     In addition, because it calls "use RDF::Trine", "use RDF::Query", and
@@ -65,6 +65,11 @@ DESCRIPTION
         is not one of the above, then the function will try to guess what
         you meant.
 
+        Preferred namespace names can be provided as a named argument:
+
+         print rdf_string($model, 'turtle',
+            namespaces => { foo=>'http://example.com/vocabs/foo#' });
+
     "rdf_query($sparql, $endpoint)"
         $sparql is a SPARQL query to be run at $endpoint.
 
@@ -95,6 +100,46 @@ DESCRIPTION
                     'http://example.com/sparql',
                     model => $model);
 
+    "rdf_node($value, %args)"
+        Creates an RDF::Trine::Node object.
+
+        Will attempt to automatically determine whether $value is a blank
+        node, resource or literal, but an optional named argument 'type' can
+        be used to explicitly indicate this.
+
+        For literals, named arguments 'datatype' and 'lang' are allowed. If
+        'datatype' is not a URI, then it's assumed to be an XSD datatype.
+
+         $node = rdf_node("Hello", type=>'literal', lang=>'en');
+
+        For resources, the named argument 'base' is allowed.
+
+        This function is not exported by default, but can be exported using
+        the tag ':nodes' or ':all'.
+
+         use RDF::TrineShortcuts qw(:default :nodes);
+
+    "rdf_literal($value, %args)", "rdf_blank($value, %args)",
+    "rdf_resource($value, %args)"
+        Shortcuts for rdf_node($value, type=>'literal', %args) and so on.
+
+        These functions are not exported by default, but can be exported
+        using the tag ':nodes' or ':all'.
+
+         use RDF::Trine qw(:all);
+
+    "rdf_statement($s, $p, $o, [$g])", "rdf_statement($ntriple, [$g])"
+        Returns an RDF::Trine::Statement. Parameters $s, $p, $o and $g can
+        each be either a plain string that could be passed to rdf_node, or
+        an arrayref of rdf_node parameters, or an RDF::Trine::Node.
+
+        $ntriple is a single N-Triples statement.
+
+        This function is not exported by default, but can be exported using
+        the tag ':all'.
+
+         use RDF::Trine qw(:all);
+
 BUGS
     Please report any bugs to <http://rt.cpan.org/>.
 
@@ -103,8 +148,9 @@ SEE ALSO
 
     <http://www.perlrdf.org/>.
 
-    This module is distributed with two command-line RDF tools. trapper is
-    an RDF fetcher/parser/serialiser; toquet is a SPARQL query tool.
+    This module is distributed with three command-line RDF tools. trapper is
+    an RDF fetcher/parser/serialiser; toquet is a SPARQL query tool; trist
+    is an RDF statistics tool.
 
 AUTHOR
     Toby Inkster <tobyink@cpan.org>.
