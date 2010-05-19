@@ -220,8 +220,8 @@ toquet - command-line RDF query tool
   
   Query languages: sparql, rdql.
   
-  Graph output formats: rdfxml, turtle, ntriples,
-                        rdfjson, canonical.
+  Graph output formats: rdfxml, turtle, ntriples, rdfa,
+                        nquads, rdfjson, canonical.
   Binding output formats: xml, json, text.
   Boolean output formats: xml, json, text.
   

@@ -3,7 +3,7 @@ NAME
     charlatans
 
 VERSION
-    0.07
+    0.08
 
 SYNOPSIS
       use RDF::TrineShortcuts;

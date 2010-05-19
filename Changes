@@ -10,10 +10,10 @@ Home page:    <http://search.cpan.org/dist/RDF-Trine-Shortcuts/>
 Maintainer:   Toby Inkster
 
 0.02 [2010-01-22]
- - (Addition) Allow rdf_parse to take an RDF::Trine::Model as input.
+ - (Bugfix) Don't break contexts in rdf_parse.
  - (Bugfix) rdf_parse should take more than just the first statement from a
    stream.
- - (Bugfix) Don't break contexts in rdf_parse.
+ - (Addition) Allow rdf_parse to take an RDF::Trine::Model as input.
 
 0.01 [2010-01-20] # first release
 
@@ -25,36 +25,41 @@ Home page:    <http://search.cpan.org/dist/RDF-TrineShortcuts/>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=RDF-TrineShortcuts>
 Maintainer:   Toby Inkster
 
+0.08 [2010-05-19]
+ - (Addition) RDFa output.
+ - More complete set of requirements in Makefile.PL.
+ - (Bugfix) Fix long-standing HTTP Link header bug.
+
 0.07 [2010-04-11]
  - (Addition) Allow rdf_string to take a 'namespaces' argument, and provide
    a default value.
+ - (Addition) Allow rdf_parse (and thus command-line tools) to accept
+   RDF::Trine::Store constructor strings, or RDF::Trine::Store objects.
  - (Bugfix) Fix namespaces in trist output.
  - (Addition) Provide shortcuts for creating RDF::Trine::Statement and
    RDF::Trine::Node objects, not exported by default.
- - (Addition) Allow rdf_parse (and thus command-line tools) to accept
-   RDF::Trine::Store constructor strings, or RDF::Trine::Store objects.
 
 0.06 [2010-04-07]
- - (Bugfix) Deal with STDIN correctly in trapper.
  - (Addition) toquet --describe shortcut.
- - (Addition) Bundle the 'trist' command-line RDF stats tool.
+ - (Bugfix) Deal with STDIN correctly in trapper.
  - Fix toquet documentation synopsis.
+ - (Addition) Bundle the 'trist' command-line RDF stats tool.
 
 0.05 [2010-02-04]
  - Fix a packaging error.
 
 0.04 [2010-02-04]
+ - (Addition) rdf_parse() will use XRD::Parser if it's installed.
  - (Update) use RDF::Trine 0.116
- - (Addition) Bundle the 'toquet' command-line tool.
  - (Addition) When fetching a URI via HTTP(S), rdf_parse() will add data
    from HTTP Link headers to the resulting model if HTTP::Link::Parser is
    installed.
+ - (Addition) Bundle the 'toquet' command-line tool.
+ - (Addition) Bundle the 'trapper' command-line tool.
+ - (Addition) rdf_query() supports non-SPARQL query languages.
+ - (Addition) rdf_query() supports relative URIs in queries.
  - (Addition) The rdf_parse() function will use XML::Atom::OWL and
    RDF::RDFa::Parser to parse Atom+RDFa if these modules are installed.
- - (Addition) rdf_query() supports non-SPARQL query languages.
- - (Addition) rdf_parse() will use XRD::Parser if it's installed.
- - (Addition) Bundle the 'trapper' command-line tool.
- - (Addition) rdf_query() supports relative URIs in queries.
 
 0.03 [2010-01-25]
  - Module renamed due to popular request. Was 'RDF::Trine::Shortcuts', now

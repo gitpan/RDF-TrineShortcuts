@@ -14,18 +14,23 @@ readme_from         $fn;
 author              'Toby Inkster <tobyink@cpan.org>';
 license             'perl';
 
-test_requires       'Test::More' => '0.61';
-
-requires            'RDF::Trine'         => '0.116';
+requires            'Exporter'           => 0;
+requires            'File::Slurp'        => 0;
+requires            'Getopt::Long'       => 0;
+requires            'LWP::Simple'        => 0;
+requires            'Pod::Usage'         => 0;
+requires            'RDF::Trine'         => '0.123';
 requires            'RDF::Query'         => '2.200';
 requires            'RDF::Query::Client' => '0.03';
 requires            'URI'                => '1.30';
 requires            'URI::file'          => 0;
-
+requires            'YAML'               => 0;
 recommends          'HTTP::Link::Parser' => '0.04';
+recommends          'RDF::RDFa::Generator' => '0.03';
 recommends          'RDF::RDFa::Parser'  => '0.30';
 recommends          'XML::Atom::OWL'     => '0.02';
 recommends          'XRD::Parser'        => '0.05';
+test_requires       'Test::More'         => '0.61';
 
 install_script 'toquet';
 install_script 'trapper';

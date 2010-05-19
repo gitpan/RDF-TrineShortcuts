@@ -91,9 +91,9 @@ trapper - command-line RDF parsing and serialising tool
     --help, -h            Show this help
     --version, -v         Show module versions
   
-  Input formats: rdfxml, turtle, rdfa, rdfjson, atom, xrd.
+  Input formats: rdfxml, turtle, rdfa, nquads, trig, rdfjson, atom, xrd.
   
-  Output formats: rdfxml, turtle, ntriples, rdfjson, canonical.
+  Output formats: rdfxml, turtle, ntriples, rdfa, nquads, rdfjson, canonical.
 
 =head1 OPTIONS
 

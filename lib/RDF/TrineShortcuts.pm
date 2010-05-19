@@ -6,7 +6,7 @@ RDF::TrineShortcuts - totally unauthorised module for cheats and charlatans
 
 =head1 VERSION
 
-0.07
+0.08
 
 =head1 SYNOPSIS
 
@@ -31,7 +31,7 @@ use strict;
 use 5.008;
 
 use Exporter;
-use RDF::Trine '0.116';
+use RDF::Trine '0.123';
 use RDF::Trine::Serializer;
 use RDF::Query '2.200';
 use RDF::Query::Client;
@@ -46,13 +46,13 @@ our %EXPORT_TAGS = (
 	);
 our @EXPORT    = ( @{ $EXPORT_TAGS{'default'} } );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
-our $VERSION   = '0.07';
+our $VERSION   = '0.08';
 my $Has;
 
 BEGIN
 {
 	$Has = {};
-	foreach my $package (qw(XML::Atom::OWL HTTP::Link::Parser XRD::Parser RDF::RDFa::Parser))
+	foreach my $package (qw(XML::Atom::OWL HTTP::Link::Parser XRD::Parser RDF::RDFa::Parser RDF::RDFa::Generator))
 	{
 		$@ = undef;
 		eval "use $package;";
@@ -127,9 +127,6 @@ sub rdf_parse
 	if ($input =~ /^([A-Za-z0-9_]+)(\;[^\r\n]*)?$/
         && UNIVERSAL::isa("RDF::Trine::Store::$1", "RDF::Trine::Store"))
 	{
-		die "need RDF::Trine 0.118 (for new_with_string support)"
-			unless RDF::Trine::Store->can('new_with_string');
-		
 		$input = RDF::Trine::Store->new_with_string($input);
 	}
 
@@ -161,7 +158,7 @@ sub rdf_parse
 	if (UNIVERSAL::isa($input, 'URI')
 	or  $input =~ m'^(https?|ftp|file):\S+$')
 	{
-		my $accept = 'application/rdf+xml, text/turtle, application/json;q=0.1, application/xhtml+xml;q=0.1';
+		my $accept = 'application/rdf+xml, text/turtle, application/x-trig, text/x-nquads, application/json;q=0.1, application/xhtml+xml;q=0.1';
 		$accept .= ', application/atom+xml;q=0.2' if $Has->{'XML::Atom::OWL'};
 		$accept .= ', application/xrd+xml;q=0.2'  if $Has->{'XRD::Parser'};
 		
@@ -173,15 +170,15 @@ sub rdf_parse
 	}
 
 	if (UNIVERSAL::isa($input, 'HTTP::Message'))
-	{
-		$type  = $input->content_type unless defined $type;
-		$base  = $input->base;
-		$input = $input->decoded_content;
-		
-		unless ($args{'no_http_links'} || !$Has->{'HTTP::Link::Parser'})
+	{		
+		if ($Has->{'HTTP::Link::Parser'} && !$args{'no_http_links'})
 		{
-			parse_links_into_model($input, $model);
+			HTTP::Link::Parser::parse_links_into_model($input, $model);
 		}
+		
+		$type ||= $input->content_type;
+		$base ||= $input->base;
+		$input  = $input->decoded_content;
 	}
 
 	if ($input !~ /[\r\n\t]/ and -e $input)
@@ -255,6 +252,10 @@ sub rdf_parse
 		elsif ($type =~ /nquad/i)
 		{
 			$parser = RDF::Trine::Parser->new('NQuads');
+		}
+		elsif ($type =~ /trig/i)
+		{
+			$parser = RDF::Trine::Parser->new('TriG');
 		}
 		elsif ($type =~ /(xhtml|rdfa)/i)
 		{
@@ -331,7 +332,7 @@ sub rdf_string
 	my %args  = @_;
 	my $s;
 	
-	$args{'namespaces'} = {
+	$args{'namespaces'} ||= {
 		dc   => 'http://purl.org/dc/terms/',
 		dc11 => 'http://purl.org/dc/elements/1.1/',
 		doap => 'http://usefulinc.com/ns/doap#',
@@ -344,8 +345,7 @@ sub rdf_string
 		skos => 'http://www.w3.org/2004/02/skos/core#',
 		v    =>	'http://www.w3.org/2006/vcard/ns#',
 		xsd  => 'http://www.w3.org/2001/XMLSchema#',
-		}
-		unless defined $args{'namespaces'};
+		};
 
 	unless (UNIVERSAL::isa($model, 'RDF::Trine::Model'))
 	{
@@ -356,9 +356,14 @@ sub rdf_string
 	{
 		$s = RDF::Trine::Serializer::RDFJSON->new;
 	}
+	elsif ($fmt =~ /rdfa/i && $Has->{'RDF::RDFa::Generator'})
+	{
+		$args{'style'} ||= 'HTML::Hidden';
+		$s = RDF::RDFa::Generator->new(%args);
+	}
 	elsif ($fmt =~ /xml/i)
 	{
-		$s = RDF::Trine::Serializer::RDFXML->new;
+		$s = RDF::Trine::Serializer::RDFXML->new(namespaces=>$args{'namespaces'});
 	}
 	elsif ($fmt =~ /canon/i)
 	{
@@ -371,6 +376,10 @@ sub rdf_string
 	elsif ($fmt =~ /n\-?t/i)
 	{
 		$s = RDF::Trine::Serializer::NTriples->new;
+	}
+	elsif ($fmt =~ /n\-?q/i)
+	{
+		$s = RDF::Trine::Serializer::NQuads->new;
 	}
 	else
 	{

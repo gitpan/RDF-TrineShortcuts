@@ -198,7 +198,7 @@ trist - command-line RDF statistics
     --help, -h             Show this help
     --version, -v          Show module versions
   
-  Input formats: rdfxml, turtle, rdfa, rdfjson, atom, xrd.
+  Input formats: rdfxml, turtle, rdfa, rdfjson, nquads, trig, atom, xrd.
   
 =head1 OPTIONS
 

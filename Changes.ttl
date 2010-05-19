@@ -76,7 +76,7 @@ my:v_0-04
 
 my:v_0-05
 
-	a               :Version ;
+	a           :Version ;
 	dc:issued	"2010-02-04"^^xsd:date ;
 	:revision	"0.05"^^xsd:string ;
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.05.tar.gz> ;
@@ -87,7 +87,7 @@ my:v_0-05
 
 my:v_0-06
 
-	a               :Version ;
+	a           :Version ;
 	dc:issued	"2010-04-07"^^xsd:date ;
 	:revision	"0.06"^^xsd:string ;
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.06.tar.gz> ;
@@ -102,7 +102,7 @@ my:v_0-06
 
 my:v_0-07
 
-	a               :Version ;
+	a           :Version ;
 	dc:issued	"2010-04-11"^^xsd:date ;
 	:revision	"0.07"^^xsd:string ;
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.07.tar.gz> ;
@@ -115,6 +115,19 @@ my:v_0-07
 				[ rdfs:label "Provide shortcuts for creating RDF::Trine::Statement and RDF::Trine::Node objects, not exported by default."@en ; a dcs:Addition ]
 		] .
 
+my:v_0-08
+
+	a           :Version ;
+	dc:issued	"2010-05-19"^^xsd:date ;
+	:revision	"0.08"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.08.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-07 ;
+			dcs:item
+				[ rdfs:label "RDFa output."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Fix long-standing HTTP Link header bug."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "More complete set of requirements in Makefile.PL."@en ]
+		] .
 
 #############################################################
 
@@ -136,7 +149,7 @@ my:project
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 ,
-	                my:v_0-07 .
+	                my:v_0-07 , my:v_0-08 .
 
 old:project
 	a               :Project ;
