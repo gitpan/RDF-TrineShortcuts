@@ -129,6 +129,22 @@ my:v_0-08
 				[ rdfs:label "More complete set of requirements in Makefile.PL."@en ]
 		] .
 
+my:v_0-100
+
+	a           :Version ;
+	dc:issued	"2010-06-23"^^xsd:date ;
+	:revision	"0.100"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.100.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-08 ;
+			dcs:item
+				[ rdfs:label "flatten_node and flatten_iterator."@en ; a dcs:Addition ] ,
+				[ rdfs:label "OpenDocument Format input."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Object-oriented interface as an alternative to the usual functions."@en ; a dcs:Addition ] ,
+				[ rdfs:label "toquet now supports Spreadsheet::Write allowing output in a variety of formats, including OpenDocument, CSV and Excel."@en ; a dcs:Addition ] ,
+				[ rdfs:label "rdf_node and rdf_query are able to expand some namespaces."@en ; a dcs:Addition ]
+		] .
+
 #############################################################
 
 my:project
@@ -148,8 +164,8 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 ,
-	                my:v_0-07 , my:v_0-08 .
+	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 , my:v_0-07 , my:v_0-08 , 
+	                my:v_0-100 .
 
 old:project
 	a               :Project ;

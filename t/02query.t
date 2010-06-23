@@ -1,5 +1,5 @@
-use Test::More tests => 2;
-BEGIN { use_ok('RDF::TrineShortcuts') };
+use Test::More tests => 1;
+use RDF::TrineShortcuts '0.100';
 
 my $in    = "<http://example.com/s> <http://example.com/p> <http://example.com/o> .\r\n";
 my $model = rdf_parse($in);

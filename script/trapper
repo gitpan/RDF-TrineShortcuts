@@ -32,10 +32,10 @@ pod2usage() if $help;
 
 if ($version)
 {
-	foreach my $component (qw(RDF::Trine RDF::TrineShortcuts HTTP::Link::Parser LWP::Simple LWP::UserAgent RDF::RDFa::Parser XML::Atom::OWL XRD::Parser))
+	foreach my $component (sort qw(RDF::Trine RDF::TrineShortcuts HTTP::Link::Parser LWP::Simple LWP::UserAgent RDF::RDFa::Parser RDF::RDFa::Generator XML::Atom::OWL XRD::Parser))
 	{
 		my $v = eval "use $component; return \$${component}::VERSION;";
-		printf("%-24s %s\n", $component, $v);
+		printf("%-24s %s\n", $component, defined $v ? $v : $@ ? 'NOT INSTALLED' : 'undef');
 	}
 	exit;
 }

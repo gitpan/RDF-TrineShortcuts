@@ -22,6 +22,7 @@ recommends:
   HTTP::Link::Parser: 0.04
   RDF::RDFa::Generator: 0.03
   RDF::RDFa::Parser: 0.30
+  Spreadsheet::Write: 0.100
   XML::Atom::OWL: 0.02
   XRD::Parser: 0.05
 requires:
@@ -42,4 +43,4 @@ resources:
   homepage: http://search.cpan.org/dist/RDF-TrineShortcuts/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/
-version: 0.08
+version: 0.100

@@ -212,6 +212,41 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.08.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.08</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">flatten_node and flatten_iterator.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">OpenDocument Format input.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Object-oriented interface as an alternative to the usual functions.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">toquet now supports Spreadsheet::Write allowing output in a variety of formats, including OpenDocument, CSV and Excel.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">rdf_node and rdf_query are able to expand some namespaces.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-06-23</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.100.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.100</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/project">
     <dc:replaces rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/project"/>
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=RDF-TrineShortcuts"/>
@@ -230,6 +265,7 @@
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-06"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/"/>

@@ -3,13 +3,13 @@ NAME
     charlatans
 
 VERSION
-    0.08
+    0.100
 
 SYNOPSIS
       use RDF::TrineShortcuts;
   
       my $model = rdf_parse('http://example.com/data.rdf');
-      my $query = 'ASK WHERE {?person a <http://xmlns.com/foaf/0.1/Person>}';
+      my $query = 'ASK { ?person a <http://xmlns.com/foaf/0.1/Person> . }';
       if (rdf_query($query, $model))
       {
         print "Document describes a person.\n";
@@ -22,12 +22,20 @@ SYNOPSIS
       }
 
 DESCRIPTION
-    This module exports four functions which simplify frequently performed
-    tasks using RDF::Trine and RDF::Query.
+    This module exports three functions which simplify frequently performed
+    tasks using RDF::Trine and RDF::Query. (A number of other functions are
+    also available but not exported by default.)
+
+    *   "rdf_parse($data)"
+
+    *   "rdf_string($model, $format)"
+
+    *   "rdf_query($sparql, $endpoint_or_model)"
 
     In addition, because it calls "use RDF::Trine", "use RDF::Query", and
     "use RDF::Query::Client", your code doesn't need to.
 
+  Main Functions
     "rdf_parse($data)"
         $data can be some serialised RDF (in RDF/XML, Turtle, RDF/JSON, or
         any other format that RDF::Trine::Parser supports); or a URI (string
@@ -36,6 +44,11 @@ DESCRIPTION
         file handle; or an RDF::Trine::Iterator::Graph. Essentially it could
         be anything you could reasonably expect to grab RDF from. It can be
         undef.
+
+        If $input is a blessed object that rdf_parse is unable to natively
+        deal with, it will attempt to call "$input->TO_RDF" and deal with
+        the result instead. (This is similar in spirit to the JSON module's
+        convert_blessed functionality.)
 
         The function returns an RDF::Trine::Model.
 
@@ -70,6 +83,12 @@ DESCRIPTION
          print rdf_string($model, 'turtle',
             namespaces => { foo=>'http://example.com/vocabs/foo#' });
 
+        You can find the relevant Internet media type like this:
+
+         my $type;
+         my $string = rdf_string($model, 'rdfxml', media_type=>\$type);
+         print $cgi->header($type), $string and exit;
+
     "rdf_query($sparql, $endpoint)"
         $sparql is a SPARQL query to be run at $endpoint.
 
@@ -100,6 +119,21 @@ DESCRIPTION
                     'http://example.com/sparql',
                     model => $model);
 
+        This function can expand a small set of commonly used prefixes. For
+        example:
+
+         $result = rdf_query('SELECT ?id ?name {?id foaf:name ?name}',
+                             $model);
+
+        The hashref $RDF::TrineShortcuts::Namespaces is consulted for
+        expansions.
+
+  Additional Functions
+    These are not exported by default, so need to be imported explicitly,
+    e.g.
+
+     use RDF::TrineShortcuts qw(:default rdf_node rdf_statement);
+
     "rdf_node($value, %args)"
         Creates an RDF::Trine::Node object.
 
@@ -114,6 +148,18 @@ DESCRIPTION
 
         For resources, the named argument 'base' is allowed.
 
+        If $value is undef, then it would normally be treated like a
+        zero-length string. By setting the argument 'passthrough_undef' to
+        1, you can allow it to pass thorugh and return undef.
+
+        This function can expand a small set of commonly used prefixes. For
+        example:
+
+         $node = rdf_node('foaf:primaryTopic');
+
+        The hashref $RDF::TrineShortcuts::Namespaces is consulted for
+        expansions.
+
         This function is not exported by default, but can be exported using
         the tag ':nodes' or ':all'.
 
@@ -122,11 +168,13 @@ DESCRIPTION
     "rdf_literal($value, %args)", "rdf_blank($value, %args)",
     "rdf_resource($value, %args)"
         Shortcuts for rdf_node($value, type=>'literal', %args) and so on.
+        The rdf_resource function will create a blank node resource if
+        $value begins '_:'.
 
         These functions are not exported by default, but can be exported
         using the tag ':nodes' or ':all'.
 
-         use RDF::Trine qw(:all);
+         use RDF::TrineShortcuts qw(:all);
 
     "rdf_statement($s, $p, $o, [$g])", "rdf_statement($ntriple, [$g])"
         Returns an RDF::Trine::Statement. Parameters $s, $p, $o and $g can
@@ -138,7 +186,94 @@ DESCRIPTION
         This function is not exported by default, but can be exported using
         the tag ':all'.
 
-         use RDF::Trine qw(:all);
+         use RDF::TrineShortcuts qw(:all);
+
+    "flatten_node($node)"
+        Converts a node back to a string.
+
+        By default, blank nodes and variables are stringified to their
+        N-Triples and SPARQL representations; URIs are stringified without
+        angled bracket delimiters; and literals to their literal values.
+
+        Various options are available: 'resource_as', 'blank_as',
+        'variable_as' and 'literal_as' can each be set to 'ntriples',
+        'value' or 'default'.
+
+         print flatten_node($my_resource, resource_as=>'ntriples');
+
+        This function is not exported by default, but can be exported using
+        the tag ':flatten' or ':all'.
+
+         use RDF::TrineShortcuts qw(:default :flatten);
+
+    "flatten_iterator($iter)"
+        Converts an iterator to a Perl list. In list context returns a list;
+        in scalar context returns an arrayref instead.
+
+        Each item in the list is, in the case of a bindings iterator, a
+        hashref; or, in the case of a triple/quad iterator, an arrayref [s,
+        p, o, g]. For boolean iterators, $iter->get_boolean is returned. The
+        nodes which are values in the hashref/arrayref are flattened with
+        flatten_node, unless flatten_iterator is called with
+        'keep_nodes'=>1.
+
+          my @results = flatten_iterator($iter, keep_nodes=>1);
+
+        You can pass additional options for flatten_node too:
+
+          my @results = flatten_iterator($iter, resource_as=>'ntriples');
+
+        This function is not exported by default, but can be exported using
+        the tag ':flatten' or ':all'.
+
+         use RDF::TrineShortcuts qw(:default :flatten);
+
+  Object-Oriented Interface
+    RDF::TrineShortcuts has an alternative, object-oriented interface, not
+    enabled by default.
+
+     use RDF::TrineShortcuts -methods;
+ 
+     my $model = RDF::Trine::Model->temporary_model;
+ 
+     # Alias for rdf_parse($some_turtle, model=>$model) 
+     $model->parse($some_turtle);
+ 
+     # Alias for rdf_string($model, 'rdfxml');
+     my $rdfxml = $model->parse('rdfxml');
+     print $rdfxml;
+ 
+     my $query = 'SELECT ?name WHERE { ?id foaf:name ?name . } ';
+ 
+     # Alias for rdf_query($query, $model);
+     my $result = $model->sparql($query);
+ 
+     # Alias for flatten_iterator();
+     my @result = $result->flatten;
+
+    And so on. The following methods are set up:
+
+    *   RDF::Trine::Model: "parse", "string", "sparql".
+
+    *   RDF::Trine::Node: "flatten".
+
+    *   RDF::Trine::Iterator: "flatten".
+
+    *   URI::http: "sparql".
+
+    *   URI: "resource".
+
+    Future versions of the RDF::Trine and URI packages may break this. It's
+    a pretty dodgy feature.
+
+    You can load the normal RDF::TrineShortcuts function-based interface in
+    addition to the object-oriented interface like this:
+
+     use RDF::TrineShortcuts qw(:default -methods);
+
+    Or everything:
+
+     use RDF::TrineShortcuts qw(:all -methods);
 
 BUGS
     Please report any bugs to <http://rt.cpan.org/>.

@@ -4,6 +4,7 @@ use strict;
 use 5.008;
 
 use File::Slurp;
+use File::Spec;
 use Getopt::Long qw(:config no_ignore_case bundling no_getopt_compat permute);
 use LWP::Simple;
 use Pod::Usage;
@@ -34,10 +35,10 @@ pod2usage() if $help;
 
 if ($version)
 {
-	foreach my $component (qw(RDF::Query RDF::Query::Client RDF::Trine RDF::TrineShortcuts LWP::Simple LWP::UserAgent))
+	foreach my $component (sort qw(RDF::Query RDF::Query::Client RDF::Trine RDF::TrineShortcuts LWP::Simple LWP::UserAgent Spreadsheet::Write))
 	{
 		my $v = eval "use $component; return \$${component}::VERSION;";
-		printf("%-24s %s\n", $component, $v);
+		printf("%-24s %s\n", $component, defined $v ? $v : $@ ? 'NOT INSTALLED' : 'undef');
 	}
 	exit;
 }
@@ -146,13 +147,30 @@ and $result->is_bindings)
 		my $m = $result->materialize;
 		print $m->length . "\n";
 	}
-	elsif ($result_format =~ /json/)
+	elsif ($result_format =~ /json/i)
 	{
 		print $result->as_json . "\n";
 	}
-	elsif ($result_format =~ /xml/)
+	elsif ($result_format =~ /xml/i)
 	{
 		print $result->as_xml . "\n";
+	}
+	elsif ($result_format =~ /^(csv|excel|xls|ods|html|xhtml)$/i)
+	{
+		eval 'use Spreadsheet::Write 0.100;';
+		die "$@\nNeed Spreadsheet::Write 0.100 or above to output in result format '$result_format'.\n" if $@;
+		my $tmpfile = File::Spec->catfile(File::Spec->tmpdir, 'toquet-'.int(10000+rand(90000)).'.tmp');
+		my $ss = Spreadsheet::Write->new(filename=>$tmpfile,format=>$result_format,failsafe=>1);
+		my @headers = map { {content=>$_,header=>1,font_weight=>'bold'} } $result->binding_names;
+		$ss->addrow(@headers);
+		while (my $row = $result->next)
+		{
+			my @row = map { $_->as_ntriples } $result->binding_values;
+			$ss->addrow(@row);
+		}
+		$ss->close;
+		print read_file($tmpfile);
+		unlink $tmpfile;
 	}
 	else
 	{
@@ -208,7 +226,7 @@ toquet - command-line RDF query tool
     --exec Q, -e Q        Provide query as a string
     --describe U          Describe URI <U>
     --input L, -i L       Set query language to L
-    --results F, -O F     Set result format to F
+    --results F, -o F     Set result format to F
     --endpoint U, -E U    SPARQL Protocol endpoint
     --data U, -D U        Data to query
     --named U, -G U       Named graph to query
@@ -220,9 +238,10 @@ toquet - command-line RDF query tool
   
   Query languages: sparql, rdql.
   
-  Graph output formats: rdfxml, turtle, ntriples, rdfa,
-                        nquads, rdfjson, canonical.
-  Binding output formats: xml, json, text.
+  Graph output formats:   rdfxml, turtle, ntriples, rdfa,
+                          nquads, rdfjson, canonical.
+  Binding output formats: xml, json, text, csv, excel,
+                          html, xhtml, ods.
   Boolean output formats: xml, json, text.
   
   Dump formats: sparql, sse, parsed, pattern.
@@ -252,7 +271,8 @@ B<--exec>. Multiple URIs can be provided.
 =item B<--results>, B<-r>, B<--output>, B<-o>
 
 Specifies the output format. The synopsis of this manual page
-shows a list of input formats.
+shows a list of input formats. Some output formats require
+Spreadsheet::Write and additional modules to be installed.
 
 Defaults are 'ntriples' (for graphs) and 'text' (for bindings
 and booleans).
