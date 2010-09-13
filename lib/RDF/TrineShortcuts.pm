@@ -6,7 +6,7 @@ RDF::TrineShortcuts - totally unauthorised module for cheats and charlatans
 
 =head1 VERSION
 
-0.100
+0.101
 
 =head1 SYNOPSIS
 
@@ -33,7 +33,7 @@ use 5.008;
 use Exporter;
 use RDF::Trine '0.123';
 use RDF::Trine::Serializer;
-use RDF::Query '2.200';
+use RDF::Query '2.900';
 use RDF::Query::Client;
 use Scalar::Util qw(blessed);
 use URI;
@@ -51,7 +51,7 @@ our @EXPORT_OK = @{ $EXPORT_TAGS{'all'} };
 our %PRAGMATA  = (
 	'methods' => \&install_methods,
 	);
-our $VERSION   = '0.100';
+our $VERSION   = '0.101';
 my $Has;
 
 our $Namespaces = {
@@ -72,7 +72,7 @@ our $Namespaces = {
 BEGIN
 {
 	$Has = {};
-	foreach my $package (qw(XML::Atom::OWL
+	foreach my $package (qw(XML::Atom::OWL RDF::TriN3
 		HTTP::Link::Parser XRD::Parser RDF::RDFa::Parser
 		RDF::RDFa::Generator))
 	{
@@ -221,6 +221,11 @@ sub rdf_parse
 		}
 	};
 	
+	if (blessed($input) && $input->can('TO_RDF'))
+	{
+		return rdf_parse($input->TO_RDF, %args);
+	}
+
 	if (blessed($input) && $input->isa('RDF::Trine::Store'))
 	{
 		$input = RDF::Trine::Model->new($input);
@@ -295,9 +300,17 @@ sub rdf_parse
 		$input = $_;
 	}
 	
-	if (blessed($input) && $input->can('TO_RDF'))
+	if ($Has->{'RDF::RDFa::Parser'} gt '1.09'
+	and $type =~ m#/#)
 	{
-		return rdf_parse($input->TO_RDF, %args);
+		my $host = RDF::RDFa::Parser::Config->host_from_media_type($type);
+		if (defined $host)
+		{
+			my $config = RDF::RDFa::Parser::Config->new($host);
+			my $parser = RDF::RDFa::Parser->new($input, $base, $config, $model->_store);
+			$parser->consume;
+			return $model;
+		}
 	}
 	
 	if ($Has->{'RDF::RDFa::Parser'} gt '1.09'
@@ -368,6 +381,12 @@ sub rdf_parse
 		{
 			$parser = RDF::Trine::Parser->new('RDFJSON');
 		}
+		elsif ($type =~ /n3/i)
+		{
+			$parser = $Has->{'RDF::TriN3'} ?
+				RDF::Trine::Parser::Notation3->new() :
+				RDF::Trine::Parser->new('Turtle');
+		}
 		elsif ($type =~ /turtle/i)
 		{
 			$parser = RDF::Trine::Parser->new('Turtle');
@@ -410,11 +429,15 @@ sub rdf_parse
 		}
 		elsif ($input =~ /<http/)
 		{
-			$parser = RDF::Trine::Parser->new('Turtle');
+			$parser = $Has->{'RDF::TriN3'} ?
+				RDF::Trine::Parser::Notation3->new() :
+				RDF::Trine::Parser->new('Turtle');
 		}
 		elsif ($input =~ /\@prefix/)
 		{
-			$parser = RDF::Trine::Parser->new('Turtle');
+			$parser = $Has->{'RDF::TriN3'} ?
+				RDF::Trine::Parser::Notation3->new() :
+				RDF::Trine::Parser->new('Turtle');
 		}
 		else
 		{
@@ -494,7 +517,12 @@ sub rdf_string
 		$s = RDF::Trine::Serializer::NTriples::Canonical->new;
 		$media = 'text/plain';
 	}
-	elsif ($fmt =~ /turtle/i || $fmt =~ /n(otation)?\s*3/i)
+	elsif ($fmt =~ /n(otation)?\s*3/i)
+	{
+		$s = RDF::Trine::Serializer::Notation3->new(namespaces=>$args{'namespaces'});
+		$media = 'text/n3';
+	}
+	elsif ($fmt =~ /turtle/i)
 	{
 		$s = RDF::Trine::Serializer::Turtle->new(namespaces=>$args{'namespaces'});
 		$media = 'text/turtle';
@@ -537,7 +565,9 @@ a list of supported languages). e.g.
             $model,
             query_lang=>'rdql');
 
-The query_base option can be used to resolve relative URIs in the query.
+Options query_base, query_update and query_load_data correspond to
+the base, update and load_data options passed to RDF::Query's
+constructor.
 
 If the SPARQL query returns a boolean (i.e. an ASK query), then
 this function returns a boolean. If the query returns a graph (i.e.
@@ -567,16 +597,31 @@ sub rdf_query
 	my $sparql   = shift;
 	my $endpoint = shift;
 	my %args     = @_;
+	
+	if (!defined $args{query_update})
+	{
+		$args{query_update} = 0;
+	}
+
+	if (!defined $args{query_load_data})
+	{
+		$args{query_load_data} = 0;
+	}
 
 	my $r;
 	if (blessed($endpoint) && $endpoint->isa('URI') or !ref $endpoint)
 	{
 		# If $sparql is not usable as-is
 		if (defined $args{'query_base'}
-		or (defined $args{'query_lang'} && $args{'query_lang'} !~ /^sparql$/i))
+		or (defined $args{'query_lang'} && $args{'query_lang'} !~ /^sparql(11)?$/i))
 		{
 			# Then use RDF::Query to rewrite it.
-			my $q = RDF::Query->new($sparql, $args{'query_base'}, undef, $args{'query_lang'});
+			my $q = RDF::Query->new($sparql, {
+				base      => $args{'query_base'},
+				lang      => $args{'query_lang'},
+				update    => $args{'query_update'},
+				load_data => $args{'query_load_data'},
+				});
 			$sparql = $q->as_sparql;
 		}
 		
@@ -591,7 +636,12 @@ sub rdf_query
 		$sparql = sparql_garnish_namespaces($sparql)
 			unless $args{'trust_prefixes'};
 		
-		my $q = RDF::Query->new($sparql, $args{'query_base'}, undef, $args{'query_lang'});
+		my $q = RDF::Query->new($sparql, {
+			base      => $args{'query_base'},
+			lang      => $args{'query_lang'},
+			update    => $args{'query_update'},
+			load_data => $args{'query_load_data'},
+			});
 		$r = $q->execute($endpoint);
 	}
 

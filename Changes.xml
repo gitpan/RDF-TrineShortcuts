@@ -247,6 +247,26 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.100.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.100</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Improve integration with RDF::RDFa::Parser; this allows HTML+RDFa to be parsed more reliably, and defers to R:R:P to decide which media types its capable of handling.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Use RDF::TriN3 if it's installed.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-09-13</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.101.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.101</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/project">
     <dc:replaces rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/project"/>
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=RDF-TrineShortcuts"/>
@@ -266,6 +286,7 @@
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/"/>

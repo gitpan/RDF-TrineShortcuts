@@ -145,6 +145,19 @@ my:v_0-100
 				[ rdfs:label "rdf_node and rdf_query are able to expand some namespaces."@en ; a dcs:Addition ]
 		] .
 
+my:v_0-101
+
+	a           :Version ;
+	dc:issued	"2010-09-13"^^xsd:date ;
+	:revision	"0.101"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.101.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-100 ;
+			dcs:item
+				[ rdfs:label "Improve integration with RDF::RDFa::Parser; this allows HTML+RDFa to be parsed more reliably, and defers to R:R:P to decide which media types its capable of handling."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Use RDF::TriN3 if it's installed."@en ; a dcs:Addition ]
+		] .
+
 #############################################################
 
 my:project
@@ -165,7 +178,7 @@ my:project
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 , my:v_0-07 , my:v_0-08 , 
-	                my:v_0-100 .
+	                my:v_0-100 , my:v_0-101 .
 
 old:project
 	a               :Project ;

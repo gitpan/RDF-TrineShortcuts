@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 
+eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+
+use 5.008;
+use strict;
+
 use Getopt::Long qw(:config no_ignore_case bundling no_getopt_compat permute);
 use LWP::Simple;
 use Pod::Usage;
@@ -14,7 +20,7 @@ my $quiet    = undef;
 my $help     = undef;
 my $version  = undef;
 
-GetOptions(
+my %opt_map = (
 	'input|i=s'      => \$in_type ,
 	'input-uri|I=s'  => \$in_base ,
 	'output|o=s'     => \$out_type ,
@@ -22,7 +28,15 @@ GetOptions(
 	'quiet|q'        => \$quiet ,
 	'help|h'         => \$help ,
 	'version|v'      => \$version ,
-);
+	);
+
+if ($ARGV[0] =~ /^OPTS:(.*)$/)
+{
+	my $opts = $1;
+	shift @ARGV;
+	Getopt::Long::GetOptionsFromString($opts, %opt_map);
+}
+GetOptions(%opt_map);
 
 my $in_src  = shift @ARGV || '<STDIN>';
 $in_src     = '<STDIN>' if $in_src eq '-';
@@ -91,9 +105,9 @@ trapper - command-line RDF parsing and serialising tool
     --help, -h            Show this help
     --version, -v         Show module versions
   
-  Input formats: rdfxml, turtle, rdfa, nquads, trig, rdfjson, atom, xrd.
+  Input formats: rdfxml, n3, turtle, rdfa, nquads, trig, rdfjson, atom, xrd.
   
-  Output formats: rdfxml, turtle, ntriples, rdfa, nquads, rdfjson, canonical.
+  Output formats: rdfxml, n3, turtle, ntriples, rdfa, nquads, rdfjson, canonical.
 
 =head1 OPTIONS
 
@@ -144,6 +158,22 @@ RDF::TrineShortcuts, so could be considered to have the same version
 number as that.
 
 =back
+
+=head1 SHEBANG!!
+
+trapper can be used as a shebang line of a Turtle or N-Triples
+file. e.g.:
+
+  #!/usr/local/bin/trapper OPTS: -i turtle -o rdfxml
+  
+  @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+  
+  [] a foaf:Person ;
+     foaf:name "Toby Inkster" .
+
+Note that you need the "OPTS:" bit to pass command-line options.
+This is a workaround for a limitation in Linux's shebang
+handling.
 
 =head1 NOTE
 

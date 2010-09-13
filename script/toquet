@@ -1,7 +1,10 @@
 #!/usr/bin/perl
 
-use strict;
+eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+
 use 5.008;
+use strict;
 
 use File::Slurp;
 use File::Spec;
@@ -16,7 +19,7 @@ my ($result_format, $count, $dump);
 my (@sources, @graphs, $endpoint);
 my ($help, $version, $quiet);
 
-GetOptions(
+my %opt_map = (
   'exec|e=s'      => \$query_text ,
   'input|i=s'     => \$query_lang ,
   'results|output|r|o=s' => \$result_format ,
@@ -31,11 +34,19 @@ GetOptions(
   'version|v'     => \$version ,
 );
 
+if ($ARGV[0] =~ /^OPTS:(.*)$/)
+{
+	my $opts = $1;
+	shift @ARGV;
+	Getopt::Long::GetOptionsFromString($opts, %opt_map);
+}
+GetOptions(%opt_map);
+
 pod2usage() if $help;
 
 if ($version)
 {
-	foreach my $component (sort qw(RDF::Query RDF::Query::Client RDF::Trine RDF::TrineShortcuts LWP::Simple LWP::UserAgent Spreadsheet::Write))
+	foreach my $component (sort qw(RDF::Query RDF::Query::Client RDF::Trine RDF::TrineShortcuts LWP::Simple LWP::UserAgent Spreadsheet::Wright))
 	{
 		my $v = eval "use $component; return \$${component}::VERSION;";
 		printf("%-24s %s\n", $component, defined $v ? $v : $@ ? 'NOT INSTALLED' : 'undef');
@@ -147,20 +158,22 @@ and $result->is_bindings)
 		my $m = $result->materialize;
 		print $m->length . "\n";
 	}
-	elsif ($result_format =~ /json/i)
+	elsif ($result_format =~ /^json$/i)
 	{
 		print $result->as_json . "\n";
 	}
-	elsif ($result_format =~ /xml/i)
+	elsif ($result_format =~ /^xml$/i)
 	{
 		print $result->as_xml . "\n";
 	}
-	elsif ($result_format =~ /^(csv|excel|xls|ods|html|xhtml)$/i)
+	elsif ($result_format =~ /^(csv|excel|xls|ods|html|xhtml)$/i
+	or     $result_format =~ /^ssw-(.+)$/i)
 	{
-		eval 'use Spreadsheet::Write 0.100;';
-		die "$@\nNeed Spreadsheet::Write 0.100 or above to output in result format '$result_format'.\n" if $@;
+		my $ssw_format = $1;
+		eval 'use Spreadsheet::Wright;';
+		die "$@\nNeed Spreadsheet::Wright or above to output in result format '$result_format'.\n" if $@;
 		my $tmpfile = File::Spec->catfile(File::Spec->tmpdir, 'toquet-'.int(10000+rand(90000)).'.tmp');
-		my $ss = Spreadsheet::Write->new(filename=>$tmpfile,format=>$result_format,failsafe=>1);
+		my $ss = Spreadsheet::Wright->new(filename=>$tmpfile,format=>$ssw_format,failsafe=>1);
 		my @headers = map { {content=>$_,header=>1,font_weight=>'bold'} } $result->binding_names;
 		$ss->addrow(@headers);
 		while (my $row = $result->next)
@@ -226,7 +239,7 @@ toquet - command-line RDF query tool
     --exec Q, -e Q        Provide query as a string
     --describe U          Describe URI <U>
     --input L, -i L       Set query language to L
-    --results F, -o F     Set result format to F
+    --output F, -o F      Set result format to F
     --endpoint U, -E U    SPARQL Protocol endpoint
     --data U, -D U        Data to query
     --named U, -G U       Named graph to query
@@ -236,12 +249,12 @@ toquet - command-line RDF query tool
     --help, -h            Show this help
     --version, -v         Show module versions
   
-  Query languages: sparql, rdql.
+  Query languages: sparql, sparql11 (default), rdql.
   
-  Graph output formats:   rdfxml, turtle, ntriples, rdfa,
+  Graph output formats:   rdfxml, n3, turtle, ntriples, rdfa,
                           nquads, rdfjson, canonical.
-  Binding output formats: xml, json, text, csv, excel,
-                          html, xhtml, ods.
+  Binding output formats: xml, json, text, csv, excel, ods,
+                          html, xhtml, ssw-xml, ssw-json.
   Boolean output formats: xml, json, text.
   
   Dump formats: sparql, sse, parsed, pattern.
@@ -268,11 +281,16 @@ of any relative URI references in the query.
 Request a description of a particular URI. This overrides
 B<--exec>. Multiple URIs can be provided.
 
+=item B<--input>
+
+Query language. Default is 'sparql11' (SPARQL 1.1). Others
+are 'sparql' (SPARQL 1.0) and 'rdql'.
+
 =item B<--results>, B<-r>, B<--output>, B<-o>
 
 Specifies the output format. The synopsis of this manual page
 shows a list of input formats. Some output formats require
-Spreadsheet::Write and additional modules to be installed.
+Spreadsheet::Wright and additional modules to be installed.
 
 Defaults are 'ntriples' (for graphs) and 'text' (for bindings
 and booleans).
@@ -326,6 +344,24 @@ RDF::TrineShortcuts, so could be considered to have the same version
 number as that.
 
 =back
+
+=head1 SHEBANG!!
+
+toquet can be used as a shebang line of a SPARQL query file. e.g.:
+
+  #!/usr/local/bin/toquet OPTS: -E http://dbpedia.org/sparql -o json
+  
+  PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+  SELECT ?person ?name
+  WHERE
+  {
+     ?person a foaf:Person ;
+        foaf:name ?name .
+  }
+
+Note that you need the "OPTS:" bit to pass command-line options.
+This is a workaround for a limitation in Linux's shebang
+handling.
 
 =head1 NOTE
 

@@ -8,7 +8,10 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.95'
+generated_by: 'Module::Install version 0.91'
+keywords:
+  - 'Semantic Web'
+  - RDF
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -22,6 +25,7 @@ recommends:
   HTTP::Link::Parser: 0.04
   RDF::RDFa::Generator: 0.03
   RDF::RDFa::Parser: 0.30
+  RDF::TriN3: 0.126
   Spreadsheet::Write: 0.100
   XML::Atom::OWL: 0.02
   XRD::Parser: 0.05
@@ -31,7 +35,7 @@ requires:
   Getopt::Long: 0
   LWP::Simple: 0
   Pod::Usage: 0
-  RDF::Query: 2.200
+  RDF::Query: 2.900
   RDF::Query::Client: 0.03
   RDF::Trine: 0.123
   URI: 1.30
@@ -43,4 +47,4 @@ resources:
   homepage: http://search.cpan.org/dist/RDF-TrineShortcuts/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/
-version: 0.100
+version: 0.101

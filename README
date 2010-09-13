@@ -3,7 +3,7 @@ NAME
     charlatans
 
 VERSION
-    0.100
+    0.101
 
 SYNOPSIS
       use RDF::TrineShortcuts;
@@ -102,8 +102,9 @@ DESCRIPTION
                     $model,
                     query_lang=>'rdql');
 
-        The query_base option can be used to resolve relative URIs in the
-        query.
+        Options query_base, query_update and query_load_data correspond to
+        the base, update and load_data options passed to RDF::Query's
+        constructor.
 
         If the SPARQL query returns a boolean (i.e. an ASK query), then this
         function returns a boolean. If the query returns a graph (i.e.

@@ -20,7 +20,7 @@ requires            'Getopt::Long'       => 0;
 requires            'LWP::Simple'        => 0;
 requires            'Pod::Usage'         => 0;
 requires            'RDF::Trine'         => '0.123';
-requires            'RDF::Query'         => '2.200';
+requires            'RDF::Query'         => '2.900';
 requires            'RDF::Query::Client' => '0.03';
 requires            'URI'                => '1.30';
 requires            'URI::file'          => 0;
@@ -28,6 +28,7 @@ requires            'YAML'               => 0;
 recommends          'HTTP::Link::Parser' => '0.04';
 recommends          'RDF::RDFa::Generator' => '0.03';
 recommends          'RDF::RDFa::Parser'  => '0.30';
+recommends          'RDF::TriN3'         => '0.126';
 recommends          'Spreadsheet::Write' => '0.100';
 recommends          'XML::Atom::OWL'     => '0.02';
 recommends          'XRD::Parser'        => '0.05';
@@ -42,6 +43,8 @@ resources(
 	'repository' => "http://goddamn.co.uk/viewvc/perlmods/$dist/",
 	'bugtracker' => "http://rt.cpan.org/Dist/Display.html?Queue=$dist",
 	);
+
+keywords 'Semantic Web', 'RDF';
 	
 write_doap_changes;
 write_doap_changes_xml;
