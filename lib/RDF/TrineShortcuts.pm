@@ -4,10 +4,6 @@ package RDF::TrineShortcuts;
 
 RDF::TrineShortcuts - totally unauthorised module for cheats and charlatans
 
-=head1 VERSION
-
-0.101
-
 =head1 SYNOPSIS
 
   use RDF::TrineShortcuts;
@@ -31,6 +27,7 @@ use strict;
 use 5.008;
 
 use Exporter;
+use LWP::UserAgent;
 use RDF::Trine '0.123';
 use RDF::Trine::Serializer;
 use RDF::Query '2.900';
@@ -51,7 +48,7 @@ our @EXPORT_OK = @{ $EXPORT_TAGS{'all'} };
 our %PRAGMATA  = (
 	'methods' => \&install_methods,
 	);
-our $VERSION   = '0.101';
+our $VERSION   = '0.102';
 my $Has;
 
 our $Namespaces = {
@@ -265,7 +262,7 @@ sub rdf_parse
 		$accept .= ', application/atom+xml;q=0.2' if $Has->{'XML::Atom::OWL'};
 		$accept .= ', application/xrd+xml;q=0.2'  if $Has->{'XRD::Parser'};
 		
-		my $ua = LWP::UserAgent->new;
+		my $ua = LWP::UserAgent->new(parse_head=>0);
 		$ua->agent(sprintf('%s/%s ', __PACKAGE__, $VERSION));
 		$ua->default_header("Accept" => $accept);
 
@@ -304,7 +301,7 @@ sub rdf_parse
 	and $type =~ m#/#)
 	{
 		my $host = RDF::RDFa::Parser::Config->host_from_media_type($type);
-		if (defined $host)
+		if (defined $host and $host ne 'xml')
 		{
 			my $config = RDF::RDFa::Parser::Config->new($host);
 			my $parser = RDF::RDFa::Parser->new($input, $base, $config, $model->_store);

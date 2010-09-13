@@ -158,6 +158,19 @@ my:v_0-101
 				[ rdfs:label "Use RDF::TriN3 if it's installed."@en ; a dcs:Addition ]
 		] .
 
+my:v_0-102
+
+	a           :Version ;
+	dc:issued	"2010-09-13"^^xsd:date ;
+	:revision	"0.102"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.102.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-101 ;
+			dcs:item
+				[ rdfs:label "Ignore RDF::RDFa::Parser's over-enthusiastic claim that it can handle all XML media types."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "Disable LWP::UserAgent's over-enthusiastic parse_head feature."@en ; a dcs:Bugfix ]
+		] .
+
 #############################################################
 
 my:project
@@ -178,7 +191,7 @@ my:project
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 , my:v_0-07 , my:v_0-08 , 
-	                my:v_0-100 , my:v_0-101 .
+	                my:v_0-100 , my:v_0-101 , my:v_0-102 .
 
 old:project
 	a               :Project ;

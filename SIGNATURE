@@ -14,14 +14,14 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 8f7d19842fea9ed8a13c45317fa050c651e94349 Changes
-SHA1 84823f39aec6c5f39a9eca64bfca5cb7eb31cf7c Changes.ttl
-SHA1 a75f3de7da8d36c2148f848705114cab166410f2 Changes.xml
+SHA1 ba5c1e59223786bb3f093870011fc1fd21e0bdd3 Changes
+SHA1 f2d7211d5b6b727cb761d828ea86d222b04818d2 Changes.ttl
+SHA1 302dcb18a0a57c745baf7c055efddd8a20724d11 Changes.xml
 SHA1 19522c42abdd2f08c8426dc3dff1fec4c5eff792 MANIFEST
 SHA1 3a87c14f230631ea3f789001be4b57dd86ace388 MANIFEST.SKIP
-SHA1 1582a2091d41ba7d9771edd3359bd9ba07064cf0 META.yml
+SHA1 98a63c519149caf8118b5d0510f192a98b2e9f8d META.yml
 SHA1 2ee826d3855b63d04b27b69febabac699b6f068d Makefile.PL
-SHA1 2a70cc41f58e1ebebf0a99ee678cf727511641da README
+SHA1 5a8ba26122dcfdc915a94af248ded18b692f5893 README
 SHA1 e5fb92ac217988bfc7a6af739b0459627020a27e inc/Module/AutoInstall.pm
 SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
 SHA1 5c529e96420d964b192f011b121283a4916f7331 inc/Module/Install/AutoInstall.pm
@@ -37,7 +37,7 @@ SHA1 3406c9015148c75406903e7382f8182613b5022a inc/Module/Install/Scripts.pm
 SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
 SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
 SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
-SHA1 ba363f04bd6c194d53854ab57fdda1cddc29ff9e lib/RDF/TrineShortcuts.pm
+SHA1 020ff21cd27e2fa2200b765260ec25e69a65aaec lib/RDF/TrineShortcuts.pm
 SHA1 68e600ca90e85705a95fff5efced107852bd4c10 script/toquet
 SHA1 1f9341b3fbeca8f063454a7ddea822d4113b5227 script/trapper
 SHA1 20254f84b40da431c919316a57c3dde409def2e6 script/trist
@@ -48,7 +48,7 @@ SHA1 c251d711838f422db88bf78939b7d8b2923dc808 t/03nodes.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkyOEGEACgkQzr+BKGoqfTnkqQCgthQfqr0GAnheIr3e1Ehosd9b
-OlYAnRRPe41OH/JNxfGOnNlc+LfdmEG3
-=Ju8V
+iEYEARECAAYFAkyOF20ACgkQzr+BKGoqfTlWVQCffzjGrOFLhsUG8g04LuEAiarO
+zbYAnjKdQ5YdNwsr+Ftgr8hf0tKpfafo
+=iMwg
 -----END PGP SIGNATURE-----

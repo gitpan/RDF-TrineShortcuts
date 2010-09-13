@@ -2,9 +2,6 @@ NAME
     RDF::TrineShortcuts - totally unauthorised module for cheats and
     charlatans
 
-VERSION
-    0.101
-
 SYNOPSIS
       use RDF::TrineShortcuts;
   

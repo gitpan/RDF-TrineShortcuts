@@ -267,6 +267,26 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.101.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.101</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-102">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Bugfix>
+            <rdfs:label xml:lang="en">Ignore RDF::RDFa::Parser's over-enthusiastic claim that it can handle all XML media types.</rdfs:label>
+          </dcs:Bugfix>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Bugfix>
+            <rdfs:label xml:lang="en">Disable LWP::UserAgent's over-enthusiastic parse_head feature.</rdfs:label>
+          </dcs:Bugfix>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-09-13</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.102.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.102</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/project">
     <dc:replaces rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/project"/>
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=RDF-TrineShortcuts"/>
@@ -287,6 +307,7 @@
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-102"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/"/>
