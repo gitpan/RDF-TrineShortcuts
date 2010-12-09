@@ -63,6 +63,7 @@ if ($in_src eq '<STDIN>')
 {
 	$in_src = '';
 	$in_src .= $_ while <>;
+	$in_base = 'file:///dev/stdin' unless defined $in_base;
 }
 
 my $graph = rdf_parse($in_src, type=>$in_type, base=>$in_base);

@@ -48,7 +48,7 @@ our @EXPORT_OK = @{ $EXPORT_TAGS{'all'} };
 our %PRAGMATA  = (
 	'methods' => \&install_methods,
 	);
-our $VERSION   = '0.102';
+our $VERSION   = '0.103';
 my $Has;
 
 our $Namespaces = {
@@ -211,10 +211,18 @@ sub rdf_parse
 
 	eval
 	{
-		if ($input =~ /^([A-Za-z0-9_]+)(\;[^\r\n]*)?$/
+		if ($input =~ /^([A-Za-z0-9_:]+)(\;[^\r\n]*)?$/
 			  && "RDF::Trine::Store::$1"->isa("RDF::Trine::Store"))
 		{
-			$input = RDF::Trine::Store->new_with_string($input);
+			my $store = RDF::Trine::Store->new_with_string($input);
+			if ($store)
+			{
+				$input = $store;
+			}
+			else
+			{
+				warn "Input looked like a Store connection string, but didn't work.";
+			}
 		}
 	};
 	

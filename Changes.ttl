@@ -171,6 +171,18 @@ my:v_0-102
 				[ rdfs:label "Disable LWP::UserAgent's over-enthusiastic parse_head feature."@en ; a dcs:Bugfix ]
 		] .
 
+my:v_0-103
+
+	a           :Version ;
+	dc:issued	"2010-12-09"^^xsd:date ;
+	:revision	"0.103"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.103.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-102 ;
+			dcs:item
+				[ rdfs:label "Assume a default base URI for data that's piped to trapper from STDIN."@en ; a dcs:Bugfix ]
+		] .
+
 #############################################################
 
 my:project
@@ -191,7 +203,7 @@ my:project
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 , my:v_0-07 , my:v_0-08 , 
-	                my:v_0-100 , my:v_0-101 , my:v_0-102 .
+	                my:v_0-100 , my:v_0-101 , my:v_0-102 , my:v_0-103 .
 
 old:project
 	a               :Project ;

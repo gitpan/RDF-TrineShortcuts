@@ -1,337 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rdf:RDF
-   xmlns:dc="http://purl.org/dc/terms/"
-   xmlns:dcs="http://ontologi.es/doap-changeset#"
-   xmlns:foaf="http://xmlns.com/foaf/0.1/"
-   xmlns:my="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/"
-   xmlns:old="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-   xmlns:toby="http://tobyinkster.co.uk/#"
-   xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-   xmlns="http://usefulinc.com/ns/doap#">
-  <rdf:Description rdf:about="file:///home/tai/src/perlmods/RDF-TrineShortcuts/Changes.ttl">
-    <dc:creator rdf:resource="http://tobyinkster.co.uk/#i"/>
-    <dc:description xml:lang="en">Revision history for Perl extension RDF::TrineShortcuts.</dc:description>
-    <dc:subject rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/project"/>
-    <dc:title>Changes</dc:title>
-  </rdf:Description>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-01">
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-20</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.01.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.01</revision>
-    <rdfs:label xml:lang="en">first release</rdfs:label>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-02">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <dcs:Bugfix>
-            <rdfs:label xml:lang="en">Don't break contexts in rdf_parse.</rdfs:label>
-          </dcs:Bugfix>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Bugfix>
-            <rdfs:label xml:lang="en">rdf_parse should take more than just the first statement from a stream.</rdfs:label>
-          </dcs:Bugfix>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Allow rdf_parse to take an RDF::Trine::Model as input.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-01"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-22</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.02.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.02</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-03">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <rdf:Description>
-            <rdfs:label xml:lang="en">Module renamed due to popular request. Was 'RDF::Trine::Shortcuts', now 'RDF::TrineShortcuts'.</rdfs:label>
-          </rdf:Description>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-02"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-25</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.03.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.03</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-04">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">rdf_query() supports non-SPARQL query languages.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">rdf_query() supports relative URIs in queries.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Bundle the 'trapper' command-line tool.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Bundle the 'toquet' command-line tool.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Update>
-            <rdfs:label xml:lang="en">use RDF::Trine 0.116</rdfs:label>
-          </dcs:Update>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">The rdf_parse() function will use XML::Atom::OWL and RDF::RDFa::Parser to parse Atom+RDFa if these modules are installed.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">When fetching a URI via HTTP(S), rdf_parse() will add data from HTTP Link headers to the resulting model if HTTP::Link::Parser is installed.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">rdf_parse() will use XRD::Parser if it's installed.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-03"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-04</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.04.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.04</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-05">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <rdf:Description>
-            <rdfs:label xml:lang="en">Fix a packaging error.</rdfs:label>
-          </rdf:Description>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-04"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-04</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.05.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.05</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-06">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <rdf:Description>
-            <rdfs:label xml:lang="en">Fix toquet documentation synopsis.</rdfs:label>
-          </rdf:Description>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Bundle the 'trist' command-line RDF stats tool.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Bugfix>
-            <rdfs:label xml:lang="en">Deal with STDIN correctly in trapper.</rdfs:label>
-          </dcs:Bugfix>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">toquet --describe shortcut.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-05"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-04-07</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.06.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.06</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Allow rdf_parse (and thus command-line tools) to accept RDF::Trine::Store constructor strings, or RDF::Trine::Store objects.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Bugfix>
-            <rdfs:label xml:lang="en">Fix namespaces in trist output.</rdfs:label>
-          </dcs:Bugfix>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Allow rdf_string to take a 'namespaces' argument, and provide a default value.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Provide shortcuts for creating RDF::Trine::Statement and RDF::Trine::Node objects, not exported by default.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-06"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-04-11</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.07.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.07</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">RDFa output.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Bugfix>
-            <rdfs:label xml:lang="en">Fix long-standing HTTP Link header bug.</rdfs:label>
-          </dcs:Bugfix>
-        </dcs:item>
-        <dcs:item>
-          <rdf:Description>
-            <rdfs:label xml:lang="en">More complete set of requirements in Makefile.PL.</rdfs:label>
-          </rdf:Description>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-05-19</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.08.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.08</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">flatten_node and flatten_iterator.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">OpenDocument Format input.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Object-oriented interface as an alternative to the usual functions.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">toquet now supports Spreadsheet::Write allowing output in a variety of formats, including OpenDocument, CSV and Excel.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">rdf_node and rdf_query are able to expand some namespaces.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-06-23</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.100.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.100</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Improve integration with RDF::RDFa::Parser; this allows HTML+RDFa to be parsed more reliably, and defers to R:R:P to decide which media types its capable of handling.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Addition>
-            <rdfs:label xml:lang="en">Use RDF::TriN3 if it's installed.</rdfs:label>
-          </dcs:Addition>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-09-13</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.101.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.101</revision>
-  </Version>
-  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-102">
-    <dcs:changeset>
-      <rdf:Description>
-        <dcs:item>
-          <dcs:Bugfix>
-            <rdfs:label xml:lang="en">Ignore RDF::RDFa::Parser's over-enthusiastic claim that it can handle all XML media types.</rdfs:label>
-          </dcs:Bugfix>
-        </dcs:item>
-        <dcs:item>
-          <dcs:Bugfix>
-            <rdfs:label xml:lang="en">Disable LWP::UserAgent's over-enthusiastic parse_head feature.</rdfs:label>
-          </dcs:Bugfix>
-        </dcs:item>
-        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101"/>
-      </rdf:Description>
-    </dcs:changeset>
-    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-09-13</dc:issued>
-    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.102.tar.gz"/>
-    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.102</revision>
-  </Version>
-  <Project rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/project">
-    <dc:replaces rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/project"/>
-    <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=RDF-TrineShortcuts"/>
-    <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-25</created>
-    <developer rdf:resource="http://tobyinkster.co.uk/#i"/>
-    <documenter rdf:resource="http://tobyinkster.co.uk/#i"/>
-    <download-page rdf:resource="http://search.cpan.org/dist/RDF-TrineShortcuts/"/>
-    <homepage rdf:resource="http://search.cpan.org/dist/RDF-TrineShortcuts/"/>
-    <license rdf:resource="http://dev.perl.org/licenses/"/>
-    <maintainer rdf:resource="http://tobyinkster.co.uk/#i"/>
-    <name>RDF-TrineShortcuts</name>
-    <programming-language>Perl</programming-language>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-03"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-04"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-05"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-06"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-102"/>
-    <repository>
-      <SVNRepository>
-        <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/"/>
-      </SVNRepository>
-    </repository>
-    <shortdesc xml:lang="en">totally unauthorised module for cheats and charlatans</shortdesc>
-    <tester rdf:resource="http://tobyinkster.co.uk/#i"/>
-  </Project>
-  <Project rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/project">
-    <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-20</created>
-    <developer rdf:resource="http://tobyinkster.co.uk/#i"/>
-    <documenter rdf:resource="http://tobyinkster.co.uk/#i"/>
-    <homepage rdf:resource="http://search.cpan.org/dist/RDF-Trine-Shortcuts/"/>
-    <license rdf:resource="http://dev.perl.org/licenses/"/>
-    <maintainer rdf:resource="http://tobyinkster.co.uk/#i"/>
-    <name>RDF-Trine-Shortcuts</name>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-01"/>
-    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-02"/>
-    <tester rdf:resource="http://tobyinkster.co.uk/#i"/>
-  </Project>
-  <foaf:Person rdf:about="http://tobyinkster.co.uk/#i">
-    <ns1:sameAs xmlns:ns1="http://www.w3.org/2002/07/owl#" rdf:resource="http://purl.org/NET/cpan-uri/person/tobyink"/>
-    <foaf:homepage rdf:resource="http://tobyinkster.co.uk/"/>
-    <foaf:name>Toby Inkster</foaf:name>
-    <foaf:page rdf:resource="http://search.cpan.org/~tobyink/"/>
-  </foaf:Person>
+<rdf:RDF xmlns:dbug="http://ontologi.es/doap-bugs#" xmlns:dc="http://purl.org/dc/terms/" xmlns:dcs="http://ontologi.es/doap-changeset#" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r0">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r1"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r2"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r3"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-01"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r1">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">Don't break contexts in rdf_parse.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r10">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">rdf_query() supports non-SPARQL query languages.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r11">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">rdf_query() supports relative URIs in queries.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r12">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Bundle the 'trapper' command-line tool.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r13">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Bundle the 'toquet' command-line tool.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r14">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Update"/>
+	<rdfs:label xml:lang="en">use RDF::Trine 0.116</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r15">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r16"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-04"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r16">
+	<rdfs:label xml:lang="en">Fix a packaging error.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r17">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r18"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r19"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r20"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r21"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-05"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r18">
+	<rdfs:label xml:lang="en">Fix toquet documentation synopsis.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r19">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Bundle the 'trist' command-line RDF stats tool.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r2">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">rdf_parse should take more than just the first statement from a stream.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r20">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">Deal with STDIN correctly in trapper.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r21">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">toquet --describe shortcut.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r22">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r23"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r24"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r25"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r26"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-06"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r23">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Allow rdf_parse (and thus command-line tools) to accept RDF::Trine::Store constructor strings, or RDF::Trine::Store objects.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r24">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">Fix namespaces in trist output.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r25">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Allow rdf_string to take a 'namespaces' argument, and provide a default value.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r26">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Provide shortcuts for creating RDF::Trine::Statement and RDF::Trine::Node objects, not exported by default.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r27">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r28"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r29"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r30"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r28">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">RDFa output.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r29">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">Fix long-standing HTTP Link header bug.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r3">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Allow rdf_parse to take an RDF::Trine::Model as input.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r30">
+	<rdfs:label xml:lang="en">More complete set of requirements in Makefile.PL.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r31">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r32"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r33"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r34"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r35"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r36"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r32">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">flatten_node and flatten_iterator.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r33">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">OpenDocument Format input.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r34">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Object-oriented interface as an alternative to the usual functions.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r35">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">toquet now supports Spreadsheet::Write allowing output in a variety of formats, including OpenDocument, CSV and Excel.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r36">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">rdf_node and rdf_query are able to expand some namespaces.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r37">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r38"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r39"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r38">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Improve integration with RDF::RDFa::Parser; this allows HTML+RDFa to be parsed more reliably, and defers to R:R:P to decide which media types its capable of handling.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r39">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">Use RDF::TriN3 if it's installed.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r4">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r5"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-02"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r40">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r41"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r42"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r41">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">Ignore RDF::RDFa::Parser's over-enthusiastic claim that it can handle all XML media types.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r42">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">Disable LWP::UserAgent's over-enthusiastic parse_head feature.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r43">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r44"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-102"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r44">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Bugfix"/>
+	<rdfs:label xml:lang="en">Assume a default base URI for data that's piped to trapper from STDIN.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r45">
+	<doap:browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/"/>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#SVNRepository"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r5">
+	<rdfs:label xml:lang="en">Module renamed due to popular request. Was 'RDF::Trine::Shortcuts', now 'RDF::TrineShortcuts'.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r6">
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r10"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r11"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r12"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r13"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r14"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r7"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r8"/>
+	<dcs:item rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r9"/>
+	<dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-03"/>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r7">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">The rdf_parse() function will use XML::Atom::OWL and RDF::RDFa::Parser to parse Atom+RDFa if these modules are installed.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r8">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">When fetching a URI via HTTP(S), rdf_parse() will add data from HTTP Link headers to the resulting model if HTTP::Link::Parser is installed.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r9">
+	<rdf:type rdf:resource="http://ontologi.es/doap-changeset#Addition"/>
+	<rdfs:label xml:lang="en">rdf_parse() will use XRD::Parser if it's installed.</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="file:///home/tai/src/perlmods/RDF-TrineShortcuts/Changes.ttl">
+	<dc:creator rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<dc:description xml:lang="en">Revision history for Perl extension RDF::TrineShortcuts.</dc:description>
+	<dc:subject rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/project"/>
+	<dc:title>Changes</dc:title>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/project">
+	<doap:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-20</doap:created>
+	<doap:developer rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<doap:documenter rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<doap:homepage rdf:resource="http://search.cpan.org/dist/RDF-Trine-Shortcuts/"/>
+	<doap:license rdf:resource="http://dev.perl.org/licenses/"/>
+	<doap:maintainer rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<doap:name>RDF-Trine-Shortcuts</doap:name>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-01"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-02"/>
+	<doap:tester rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Project"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-01">
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-20</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.01.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.01</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+	<rdfs:label xml:lang="en">first release</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/v_0-02">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r0"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-22</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-Trine-Shortcuts-0.02.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.02</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/project">
+	<dc:replaces rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-Trine-Shortcuts/project"/>
+	<doap:bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=RDF-TrineShortcuts"/>
+	<doap:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-25</doap:created>
+	<doap:developer rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<doap:documenter rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<doap:download-page rdf:resource="http://search.cpan.org/dist/RDF-TrineShortcuts/"/>
+	<doap:homepage rdf:resource="http://search.cpan.org/dist/RDF-TrineShortcuts/"/>
+	<doap:license rdf:resource="http://dev.perl.org/licenses/"/>
+	<doap:maintainer rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<doap:name>RDF-TrineShortcuts</doap:name>
+	<doap:programming-language>Perl</doap:programming-language>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-03"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-04"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-05"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-06"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-102"/>
+	<doap:release rdf:resource="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-103"/>
+	<doap:repository rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r45"/>
+	<doap:shortdesc xml:lang="en">totally unauthorised module for cheats and charlatans</doap:shortdesc>
+	<doap:tester rdf:resource="http://tobyinkster.co.uk/#i"/>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Project"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-03">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r4"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-01-25</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.03.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.03</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-04">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r6"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-04</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.04.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.04</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-05">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r15"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-04</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.05.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.05</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-06">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r17"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-04-07</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.06.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.06</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-07">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r22"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-04-11</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.07.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.07</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-08">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r27"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-05-19</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.08.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.08</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-100">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r31"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-06-23</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.100.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.100</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-101">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r37"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-09-13</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.101.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.101</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-102">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r40"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-09-13</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.102.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.102</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.org/NET/cpan-uri/dist/RDF-TrineShortcuts/v_0-103">
+	<dcs:changeset rdf:nodeID="r97CB6E6403E411E09740B7AEE915DB74r43"/>
+	<dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-12-09</dc:issued>
+	<doap:file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.103.tar.gz"/>
+	<doap:revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.103</doap:revision>
+	<rdf:type rdf:resource="http://usefulinc.com/ns/doap#Version"/>
+</rdf:Description>
+<rdf:Description xmlns:ns1="http://www.w3.org/2002/07/owl#" rdf:about="http://tobyinkster.co.uk/#i">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<ns1:sameAs rdf:resource="http://purl.org/NET/cpan-uri/person/tobyink"/>
+	<foaf:homepage rdf:resource="http://tobyinkster.co.uk/"/>
+	<foaf:name>Toby Inkster</foaf:name>
+	<foaf:page rdf:resource="http://search.cpan.org/~tobyink/"/>
+</rdf:Description>
 </rdf:RDF>
