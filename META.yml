@@ -4,6 +4,7 @@ author:
   - 'Toby Inkster <tobyink@cpan.org>'
 build_requires:
   ExtUtils::MakeMaker: 6.42
+  Module::Signature: 0.66
   Test::More: 0.61
 configure_requires:
   ExtUtils::MakeMaker: 6.42
@@ -12,6 +13,7 @@ generated_by: 'Module::Install version 1.00'
 keywords:
   - 'Semantic Web'
   - RDF
+  - Hack
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -24,7 +26,6 @@ no_index:
 recommends:
   HTTP::Link::Parser: 0.04
   RDF::RDFa::Generator: 0.03
-  RDF::RDFa::Parser: 0.30
   RDF::TriN3: 0.126
   Spreadsheet::Write: 0.100
   XML::Atom::OWL: 0.02
@@ -35,9 +36,10 @@ requires:
   Getopt::Long: 0
   LWP::Simple: 0
   Pod::Usage: 0
-  RDF::Query: 2.900
+  RDF::Query: 2.903
   RDF::Query::Client: 0.03
-  RDF::Trine: 0.123
+  RDF::RDFa::Parser: 1.093
+  RDF::Trine: 0.130
   URI: 1.30
   URI::file: 0
   YAML: 0
@@ -47,4 +49,4 @@ resources:
   homepage: http://search.cpan.org/dist/RDF-TrineShortcuts/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/RDF-TrineShortcuts/
-version: 0.103
+version: 0.104

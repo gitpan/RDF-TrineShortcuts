@@ -19,19 +19,20 @@ requires            'File::Slurp'        => 0;
 requires            'Getopt::Long'       => 0;
 requires            'LWP::Simple'        => 0;
 requires            'Pod::Usage'         => 0;
-requires            'RDF::Trine'         => '0.123';
-requires            'RDF::Query'         => '2.900';
+requires            'RDF::RDFa::Parser'  => '1.093';
+requires            'RDF::Trine'         => '0.130';
+requires            'RDF::Query'         => '2.903';
 requires            'RDF::Query::Client' => '0.03';
 requires            'URI'                => '1.30';
 requires            'URI::file'          => 0;
 requires            'YAML'               => 0;
 recommends          'HTTP::Link::Parser' => '0.04';
 recommends          'RDF::RDFa::Generator' => '0.03';
-recommends          'RDF::RDFa::Parser'  => '0.30';
 recommends          'RDF::TriN3'         => '0.126';
 recommends          'Spreadsheet::Write' => '0.100';
 recommends          'XML::Atom::OWL'     => '0.02';
 recommends          'XRD::Parser'        => '0.05';
+test_requires       'Module::Signature'  => '0.66';
 test_requires       'Test::More'         => '0.61';
 
 install_script 'toquet';
@@ -44,8 +45,8 @@ resources(
 	'bugtracker' => "http://rt.cpan.org/Dist/Display.html?Queue=$dist",
 	);
 
-keywords 'Semantic Web', 'RDF';
-	
+keywords 'Semantic Web', 'RDF', 'Hack';
+
 write_doap_changes;
 write_doap_changes_xml;
 

@@ -1,6 +1,8 @@
 #############################################################
 
 @prefix :        <http://usefulinc.com/ns/doap#> .
+@prefix author:  <http://purl.org/NET/cpan-uri/person/> .
+@prefix db:      <http://ontologi.es/doap-bugs#> .
 @prefix dcs:     <http://ontologi.es/doap-changeset#> .
 @prefix dc:      <http://purl.org/dc/terms/> .
 @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
@@ -183,6 +185,22 @@ my:v_0-103
 				[ rdfs:label "Assume a default base URI for data that's piped to trapper from STDIN."@en ; a dcs:Bugfix ]
 		] .
 
+my:v_0-104
+
+	a           :Version ;
+	dc:issued	"2010-01-08"^^xsd:date ;
+	:revision	"0.104"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/RDF-TrineShortcuts-0.104.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-103 ;
+			dcs:item
+				[ rdfs:label "use RDF::Trine 0.130."@en ; a dcs:Update ] ,
+				[ rdfs:label "use RDF::Query 2.903."@en ; a dcs:Update ] ,
+				[ rdfs:label "Various rdf_parse cleanups. RDF::RDFa::Parser 1.093 is now required - this eliminates a lot of conditional code."@en ] ,
+				[ rdfs:label "rdf_blank always returned the same blank node with an identifier of 'blank'."@en ; a dcs:Bugfix  ; dcs:fixes [ db:reporter author:gwilliams ] ] ,
+				[ rdfs:label "rdf_statement failed if RDF::Trine::Parser::Redland was in action."@en ; a dcs:Bugfix ; dcs:fixes [ db:reporter author:gwilliams ] ]
+		] .
+
 #############################################################
 
 my:project
@@ -203,7 +221,7 @@ my:project
 	:created        "2010-01-25"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-03 , my:v_0-04 , my:v_0-05 , my:v_0-06 , my:v_0-07 , my:v_0-08 , 
-	                my:v_0-100 , my:v_0-101 , my:v_0-102 , my:v_0-103 .
+	                my:v_0-100 , my:v_0-101 , my:v_0-102 , my:v_0-103 , my:v_0-104 .
 
 old:project
 	a               :Project ;
@@ -225,6 +243,7 @@ toby:i
 	foaf:name       "Toby Inkster" ;
 	foaf:homepage   <http://tobyinkster.co.uk/> ;
 	foaf:page       <http://search.cpan.org/~tobyink/> ;
-	<http://www.w3.org/2002/07/owl#sameAs> <http://purl.org/NET/cpan-uri/person/tobyink> .
+	foaf:mbox       <mailto:tobyink@cpan.org> ;
+	<http://www.w3.org/2002/07/owl#sameAs> author:tobyink .
 
 #############################################################

@@ -28,10 +28,11 @@ use 5.008;
 
 use Exporter;
 use LWP::UserAgent;
-use RDF::Trine '0.123';
+use RDF::RDFa::Parser '1.093';
+use RDF::Trine '0.130';
 use RDF::Trine::Serializer;
-use RDF::Query '2.900';
-use RDF::Query::Client;
+use RDF::Query '2.903';
+use RDF::Query::Client '0.03';
 use Scalar::Util qw(blessed);
 use URI;
 use URI::file;
@@ -48,7 +49,7 @@ our @EXPORT_OK = @{ $EXPORT_TAGS{'all'} };
 our %PRAGMATA  = (
 	'methods' => \&install_methods,
 	);
-our $VERSION   = '0.103';
+our $VERSION   = '0.104';
 my $Has;
 
 our $Namespaces = {
@@ -62,7 +63,7 @@ our $Namespaces = {
 	rdfs => 'http://www.w3.org/2000/01/rdf-schema#',
 	sioc => 'http://rdfs.org/sioc/ns#',
 	skos => 'http://www.w3.org/2004/02/skos/core#',
-	v    =>	'http://www.w3.org/2006/vcard/ns#',
+	v    => 'http://www.w3.org/2006/vcard/ns#',
 	xsd  => 'http://www.w3.org/2001/XMLSchema#',
 	};
 
@@ -70,8 +71,7 @@ BEGIN
 {
 	$Has = {};
 	foreach my $package (qw(XML::Atom::OWL RDF::TriN3
-		HTTP::Link::Parser XRD::Parser RDF::RDFa::Parser
-		RDF::RDFa::Generator))
+		HTTP::Link::Parser XRD::Parser RDF::RDFa::Generator))
 	{
 		$@ = undef;
 		my $r = eval "use $package; return \$${package}::VERSION;";
@@ -151,11 +151,11 @@ functions are also available but not exported by default.)
 
 =over 4
 
-=item * C<rdf_parse($data)>
+=item * C<< rdf_parse($data) >>
 
-=item * C<rdf_string($model, $format)>
+=item * C<< rdf_string($model, $format) >>
 
-=item * C<rdf_query($sparql, $endpoint_or_model)>
+=item * C<< rdf_query($sparql, $endpoint_or_model) >>
 
 =back
 
@@ -207,8 +207,27 @@ sub rdf_parse
 	my $type    = $args{'type'};
 	my $base    = $args{'base'};
 
+	# If input is undef, return empty model (or provided model if any)
 	return $model unless defined $input;
 
+	# If input is an object with a TO_RDF method, use the output of
+	# that method instead. (This is analagous to the TO_JSON method
+	# used by the JSON module.
+	if (blessed($input) && $input->can('TO_RDF'))
+	{
+		return rdf_parse($input->TO_RDF, %args);
+	}
+
+	# If the input is a hashref, then we'll treat it as an RDF/JSON-like
+	# structure.
+	if (ref $input eq 'HASH')
+	{
+		$model->add_hashref($input);
+		return $model;
+	}
+
+	# If input is a string that conforms to RDF::Trine::Store::new_with_string
+	# then call that constructor and set input to be the store instead.
 	eval
 	{
 		if ($input =~ /^([A-Za-z0-9_:]+)(\;[^\r\n]*)?$/
@@ -226,16 +245,13 @@ sub rdf_parse
 		}
 	};
 	
-	if (blessed($input) && $input->can('TO_RDF'))
-	{
-		return rdf_parse($input->TO_RDF, %args);
-	}
-
+	# If the input is a store, then make a model of it.
 	if (blessed($input) && $input->isa('RDF::Trine::Store'))
 	{
 		$input = RDF::Trine::Model->new($input);
 	}
 
+	# If the input is a model, then make a stream of it.
 	if (blessed($input) && $input->isa('RDF::Trine::Model'))
 	{
 		if ($context)
@@ -248,6 +264,8 @@ sub rdf_parse
 		}
 	}
 
+	# If the input is a stream, then deal with it and return the
+	# result.
 	if (blessed($input) && $input->isa('RDF::Trine::Iterator'))
 	{
 		while (my $st = $input->next)
@@ -257,14 +275,27 @@ sub rdf_parse
 		return $model;
 	}
 
-	if (ref $input eq 'HASH')
+	# If the input is a filename, then open the file and treat the filehandle as the input
+	if ($input !~ /[\r\n\t]/ and -e $input)
 	{
-		$model->add_hashref($input);
-		return $model;
+		my $fn = $input;
+		$input = undef;
+		$base  = URI::file->new_abs($fn)->as_string;
+		open $input, $fn;
 	}
 
-	if (blessed($input) && $input->isa('URI')
-	or  $input =~ m'^(https?|ftp|file):\S+$')
+	# If the input is a file handle, then treat the contents as input
+	if (ref $input eq 'GLOB')
+	{
+		local $/;
+		local $_ = <$input>;
+		$input->close;
+		$input = $_;
+	}
+
+	# If the input is a URI then dereference it to get an HTTP::Message.
+	elsif (blessed($input) && $input->isa('URI')
+	or     $input =~ m'^(https?|ftp|file):\S+$')
 	{
 		my $accept = 'application/rdf+xml, text/turtle, application/x-trig, text/x-nquads, application/json;q=0.1, application/xhtml+xml;q=0.1';
 		$accept .= ', application/atom+xml;q=0.2' if $Has->{'XML::Atom::OWL'};
@@ -277,6 +308,7 @@ sub rdf_parse
 		$input = $ua->get("$input");
 	}
 
+	# If the input is an HTTP::Message, then use the body as input.
 	if (blessed($input) && $input->isa('HTTP::Message'))
 	{		
 		if ($Has->{'HTTP::Link::Parser'} && !$args{'no_http_links'})
@@ -289,24 +321,10 @@ sub rdf_parse
 		$input  = $input->decoded_content;
 	}
 
-	if ($input !~ /[\r\n\t]/ and -e $input)
-	{
-		my $fn = $input;
-		$input = undef;
-		$base  = URI::file->new_abs($fn)->as_string;
-		open $input, $fn;
-	}
-
-	if (ref $input eq 'GLOB')
-	{
-		local $/;
-		local $_ = <$input>;
-		$input->close;
-		$input = $_;
-	}
-	
-	if ($Has->{'RDF::RDFa::Parser'} gt '1.09'
-	and $type =~ m#/#)
+	# If the type parameter is a real Internet Media Type, then we can
+	# check to see if it's a type supported by RDF::RDFa::Parser,
+	# and if so, parse the input and return the result.
+	if ($type =~ m#/#)
 	{
 		my $host = RDF::RDFa::Parser::Config->host_from_media_type($type);
 		if (defined $host and $host ne 'xml')
@@ -318,55 +336,54 @@ sub rdf_parse
 		}
 	}
 	
-	if ($Has->{'RDF::RDFa::Parser'} gt '1.09'
-	and (($type||'') =~ m'atom'i or ((!defined $type) and $input =~ m'http://www.w3.org/2005/Atom')))
+	# Alternatively, if the type parameter is some string that we
+	# recognise and know RDF::RDFa::Parser can deal with, then let it.
+	if (($type||'') =~ m'atom'i or ((!defined $type) and $input =~ m'http://www.w3.org/2005/Atom'))
 	{
 		my $opts = RDF::RDFa::Parser::Config->new('atom', '1.1', atom_parser=>1);
 		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
 		$p->consume;
 		return $model;
 	}
-	elsif ($Has->{'RDF::RDFa::Parser'}
-	and (($type||'') =~ m'atom'i or ((!defined $type) and $input =~ m'http://www.w3.org/2005/Atom')))
-	{
-		my $opts = RDF::RDFa::Parser::OPTS_ATOM();
-		$opts->{'atom_parser'} = 1;
-		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
-		$p->consume;
-		return $model;
-	}
-	elsif ($Has->{'XML::Atom::OWL'}
-	and (($type||'') =~ m'atom'i or ((!defined $type) and $input =~ m'http://www.w3.org/2005/Atom')))
-	{
-		my $p = XML::Atom::OWL->new($input, $base, undef, $model->_store);
-		$p->consume;
-		return $model;
-	}
-	elsif ($Has->{'RDF::RDFa::Parser'}  gt '1.09'
-	and ($type||'') =~ m'svg'i)
+	elsif (($type||'') =~ m'svg'i)
 	{
 		my $opts = RDF::RDFa::Parser::Config->new('svg', '1.1', atom_parser=>1);
 		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
 		$p->consume;
 		return $model;
 	}
-	elsif ($Has->{'RDF::RDFa::Parser'}
-	and ($type||'') =~ m'svg'i)
+	elsif (($type||'') =~ m'(xhtml|rdfa)'i)
 	{
-		my $opts = RDF::RDFa::Parser::OPTS_SVG();
+		my $opts = RDF::RDFa::Parser::Config->new('xhtml', '1.1');
 		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
 		$p->consume;
 		return $model;
 	}
-	elsif ($Has->{'RDF::RDFa::Parser'}  gt '1.09'
-	and ($type||'') =~ m'opendoc'i)
+	elsif (($type||'') =~ m'html\s*4'i)
+	{
+		my $opts = RDF::RDFa::Parser::Config->new('html4', '1.1');
+		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
+		$p->consume;
+		return $model;
+	}
+	elsif (($type||'') =~ m'html'i)
+	{
+		my $opts = RDF::RDFa::Parser::Config->new('html5', '1.1');
+		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
+		$p->consume;
+		return $model;
+	}
+	elsif (($type||'') =~ m'opendoc'i)
 	{
 		my $opts = RDF::RDFa::Parser::Config->new('opendocument-zip', '1.1');
 		my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
 		$p->consume;
 		return $model;
 	}
-	elsif ($Has->{'XRD::Parser'}
+	
+	# If XRD::Parser is installed and the input seems to be XRD, then let
+	# it do its trick.
+	if ($Has->{'XRD::Parser'}
 	and (($type||'') =~ m'xrd'i or ((!defined $type) and $input =~ m'http://docs.oasis-open.org/ns/xri/xrd-1.0')))
 	{
 		my $p = XRD::Parser->new($input, $base, undef, $model->_store);
@@ -374,8 +391,9 @@ sub rdf_parse
 		return $model;
 	}
 
+	# Otherwise, hand the string over to RDF::Trine::Parser according
+	# to the type provided.
 	my $parser;
-
 	if (defined $type)
 	{
 		if ($type =~ /rdf.?xml/i)
@@ -408,37 +426,38 @@ sub rdf_parse
 		{
 			$parser = RDF::Trine::Parser->new('TriG');
 		}
-		elsif ($type =~ /(xhtml|rdfa)/i)
-		{
-			$parser = RDF::Trine::Parser->new('RDFa');
-		}
 		else
 		{
 			eval { $parser = RDF::Trine::Parser->new($type); }
 		}
 	}
 	
+	# The type provided wasn't enough, let's try to sniff the content type.
 	unless ($parser)
 	{
-		if ($input =~ /^\s*\{/s)
+		my $tester = substr($input, 0, 512);
+		if ($tester =~ /^\s*\{/s)
 		{
 			$parser = RDF::Trine::Parser->new('RDFJSON');
 		}
-		elsif ($input =~ /<rdf:RDF/)
+		elsif ($tester =~ /<rdf:RDF/)
 		{
 			$parser = RDF::Trine::Parser->new('RDFXML');
 		}
-		elsif ($input =~ /<html/)
+		elsif ($tester =~ /<html/ or $tester =~ m'xmlns="http://www.w3.org/1999/xhtml"')
 		{
-			$parser = RDF::Trine::Parser->new('RDFa');
+			my $opts = RDF::RDFa::Parser::Config->new('html5', '1.1');
+			my $p = RDF::RDFa::Parser->new($input, $base, $opts, $model->_store);
+			$p->consume;
+			return $model;
 		}
-		elsif ($input =~ /<http/)
+		elsif ($tester =~ /<http/)
 		{
 			$parser = $Has->{'RDF::TriN3'} ?
 				RDF::Trine::Parser::Notation3->new() :
 				RDF::Trine::Parser->new('Turtle');
 		}
-		elsif ($input =~ /\@prefix/)
+		elsif ($tester =~ /\@prefix/)
 		{
 			$parser = $Has->{'RDF::TriN3'} ?
 				RDF::Trine::Parser::Notation3->new() :
@@ -634,7 +653,7 @@ sub rdf_query
 			unless $args{'trust_prefixes'};
 		
 		my $q = RDF::Query::Client->new($sparql);
-		$r = $q->execute("$endpoint");
+		$r = $q->execute("$endpoint") or die $q->error;
 	}
 	else
 	{
@@ -646,8 +665,8 @@ sub rdf_query
 			lang      => $args{'query_lang'},
 			update    => $args{'query_update'},
 			load_data => $args{'query_load_data'},
-			});
-		$r = $q->execute($endpoint);
+			}) or die RDF::Query->error;
+		$r = $q->execute($endpoint) or die $q->error;
 	}
 
 	if ($r->is_boolean)
@@ -667,7 +686,7 @@ sub rdf_query
 sub sparql_garnish_namespaces
 {
 	my $q = shift;
-	while (my($p,$u) = each %$Namespaces)
+	while (my ($p,$u) = each %$Namespaces)
 	{
 		next unless $q =~ /$p:/;
 		next if $q =~ /\bprefix\s+$p\s*:/i;
@@ -691,8 +710,8 @@ These are not exported by default, so need to be imported explicitly, e.g.
 Creates an RDF::Trine::Node object.
 
 Will attempt to automatically determine whether $value is a blank node,
-resource or literal, but an optional named argument 'type' can be used
-to explicitly indicate this.
+resource, literal or variable, but an optional named argument 'type' can 
+be used to explicitly indicate this.
 
 For literals, named arguments 'datatype' and 'lang' are allowed. If
 'datatype' is not a URI, then it's assumed to be an XSD datatype.
@@ -702,7 +721,7 @@ For literals, named arguments 'datatype' and 'lang' are allowed. If
 For resources, the named argument 'base' is allowed.
 
 If $value is undef, then it would normally be treated like a zero-length
-string. By setting the argument 'passthrough_undef' to 1, you can allow
+string. By setting the argument 'passthrough_undef' to 1, you can allow 
 it to pass thorugh and return undef.
 
 This function can expand a small set of commonly used prefixes. For
@@ -738,9 +757,18 @@ sub rdf_node
 	elsif ($value =~ /^_:(.*)$/)
 	{
 		$args{'type'} ||= 'blank';
-		$value = $1 if $args{'type'} =~ /(blank|bnode)/i;
+		my $label = $1;
+		$value = $label
+			if $args{'type'} =~ /(blank|bnode)/i;
 	}
-	elsif ($value =~ /^([a-z0-9\+\-]+):([a-z0-9\_\+\-]*)$/i && defined $Namespaces->{$1})
+	elsif ($value =~ /^\?(.*)$/)
+	{
+		$args{'type'} ||= 'variable';
+		my $label = $1;
+		$value = $label
+			if $args{'type'} =~ /var/i;
+	}
+	elsif ($value =~ /^([a-z0-9\+\-]+):([a-z0-9\_\+\-]*)$/i and defined $Namespaces->{$1})
 	{
 		$args{'type'} ||= 'resource';
 		$value = $Namespaces->{$1} . $2;
@@ -782,15 +810,36 @@ sub rdf_node
 		return RDF::Trine::Node::Blank->new($value);
 	}
 	
+	elsif ($args{'type'} =~ /var/i)
+	{
+		return RDF::Trine::Node::Variable->new($value);
+	}
+	
 	else
 	{
 		if (defined $args{'datatype'}
-		&& length $args{'datatype'}
-		&& $args{'datatype'} !~ /^[a-z0-9\+\-]+:\S*$/i)
+		and length $args{'datatype'}
+		and $args{'datatype'} !~ /^[a-z0-9\+\-]+:\S*$/i)
 		{
-			$args{'datatype'} = sprintf('http://www.w3.org/2001/XMLSchema#%s',
-				$args{'datatype'});
+			$args{'datatype'} = sprintf('http://www.w3.org/2001/XMLSchema#%s', $args{'datatype'});
 		}
+		elsif (defined $args{'datatype'}
+		and blessed($args{'datatype'})
+		and $args{'datatype'}->isa('RDF::Trine::Node::Resource'))
+		{
+			$args{'datatype'} = $args{'datatype'}->uri;
+		}
+		elsif (defined $args{'datatype'}
+		and $args{'datatype'} =~ /^([a-z0-9\+\-]+):([a-z0-9\_\+\-]*)$/i
+		and defined $Namespaces->{$1})
+		{
+			$args{'datatype'} = $Namespaces->{$1} . $2;
+		}
+		
+		$args{'lang'} = $1
+			if $args{'lang'} =~ /^\@(.+)$/;
+		$args{'language'} = $1
+			if $args{'language'} =~ /^\@(.+)$/;
 		
 		return RDF::Trine::Node::Literal->new($value, $args{'lang'}||$args{'language'}, $args{'datatype'});
 	}
@@ -798,7 +847,8 @@ sub rdf_node
 
 =item C<< rdf_literal($value, %args) >>,
 C<< rdf_blank($value, %args) >>, 
-C<< rdf_resource($value, %args) >>
+C<< rdf_resource($value, %args) >>,
+C<< rdf_variable($value, %args) >>
 
 Shortcuts for rdf_node($value, type=>'literal', %args) and so on. The
 rdf_resource function will create a blank node resource if $value begins
@@ -821,6 +871,12 @@ sub rdf_blank
 {
 	my $value = shift;
 	return rdf_node($value, type=>'blank', @_);
+}
+
+sub rdf_variable
+{
+	my $value = shift;
+	return rdf_node($value, type=>'variable', @_);
 }
 
 sub rdf_resource
@@ -853,7 +909,8 @@ sub rdf_statement
 	if (!defined $o && !defined $g)
 	{
 		(my $ntriple, $g, $p) = ($s, $p, undef);
-		$ntriple .= ' .' unless $ntriple =~ /\.[\s\r\n]*(#[^\r\n]*)?$/;
+		$ntriple .= " ." unless $ntriple =~ /\.[\s\r\n]*(#[^\r\n]*)?$/;
+		$ntriple .= "\n";
 		my $model = rdf_parse($ntriple, type=>'ntriples', context=>$g);
 		my $iter  = $model->get_statements(undef,undef,undef,undef);
 		if (my $st = $iter->next)

@@ -136,8 +136,8 @@ DESCRIPTION
         Creates an RDF::Trine::Node object.
 
         Will attempt to automatically determine whether $value is a blank
-        node, resource or literal, but an optional named argument 'type' can
-        be used to explicitly indicate this.
+        node, resource, literal or variable, but an optional named argument
+        'type' can be used to explicitly indicate this.
 
         For literals, named arguments 'datatype' and 'lang' are allowed. If
         'datatype' is not a URI, then it's assumed to be an XSD datatype.
@@ -164,7 +164,7 @@ DESCRIPTION
          use RDF::TrineShortcuts qw(:default :nodes);
 
     "rdf_literal($value, %args)", "rdf_blank($value, %args)",
-    "rdf_resource($value, %args)"
+    "rdf_resource($value, %args)", "rdf_variable($value, %args)"
         Shortcuts for rdf_node($value, type=>'literal', %args) and so on.
         The rdf_resource function will create a blank node resource if
         $value begins '_:'.
